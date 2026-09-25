@@ -29,6 +29,33 @@ If invoked with an explicit argument (`/ghl-website new-site`, etc.), use that m
    - For `new-page` and `fix` modes specifically, always work from the client's actual design guideline file and a finished reference page (or current GHL Preview screenshots) — never approximate the existing site's look from description alone.
    - If GHL's own platform behavior is unclear on something `platform-know-how.md` and `references/issue-log.md` don't cover, search for official GoHighLevel documentation or support articles rather than guessing how the platform behaves.
 
+## Build flow: plan, then mockup, then split for GHL
+
+This applies to `new-site` and `new-page` — anywhere you're producing page content, not `fix`. Work in three gated phases, one page at a time. For `new-site` that means the homepage only — don't plan or mock up the rest of the site in the same pass; other pages are separate `new-page` runs later. Never collapse phases into one response or decide on your own to keep going: each phase ends with the user, not with you.
+
+**Phase 1 — Plan (short, text only, no code)**
+
+Propose, in a few lines each:
+- Sections for this page (a plain list, e.g. hero / problems / services / proof / process / FAQ / contact)
+- Mood (a handful of words, e.g. "confident, industrial, no-nonsense")
+- Tone (a handful of words, e.g. "direct, plain-English, a little blunt")
+
+Keep it short — this is a fast alignment check, not the full design guideline. Stop and ask for feedback before writing any code. If the user adjusts something, restate the plan briefly and check again before moving on.
+
+**Phase 2 — Single-file mockup (for review, not for GHL yet)**
+
+Once the plan is approved, build ONE self-contained `.html` file for this page — everything inline (CSS in `<style>`, JS in `<script>`), openable directly in a browser, no GHL splitting yet. For `new-site`, include a real header and footer in this same file so it reads as a finished page. For `new-page`, reconstruct the existing site's real header/footer from its design guideline/reference page so the mockup can be judged on its own, even though only the page body ultimately gets delivered to GHL.
+
+- **Images**: use real, working Unsplash photo URLs (`images.unsplash.com/photo-...`), not placeholder tokens — the point of this phase is that it looks finished enough to react to. Verify a URL actually resolves before using it rather than guessing one.
+- **Motion**: where it strengthens the page, add real animation — CSS transitions/keyframes, scroll-reveal, hover states, a considered hero effect. Respect `prefers-reduced-motion`.
+- **Video**: where a hero or section would benefit from a background video, source a real, working, free-license video file (e.g. Pexels, Coverr, Mixkit) and embed it with `<video>` — verify it resolves rather than fabricating a link. Don't force video in where it doesn't earn its place.
+
+Deliver the single file, then stop and ask for comments. Iterate on this same single file — not on GHL layers — until it's approved. This is the cheap phase to get wrong; don't rush past it into Phase 3.
+
+**Phase 3 — Split into GHL**
+
+Only once the mockup is approved, split it into the 4-layer GHL structure using the migration procedure in `references/platform-know-how.md` ("When migrating an existing single-file HTML mockup into GHL") — that procedure exists for exactly this handoff, whether the single file came from this skill's own Phase 2 or from something the user handed you directly. Before delivering, flag every Unsplash/stock-video URL carried over from the mockup and ask whether to keep it (it renders fine in GHL — it's just an external image/video URL) or swap it for the client's own Media Library upload. Then follow the mode's own output format in `references/prompt-new-site.md` or `references/prompt-new-page.md` for what to deliver.
+
 ## After building
 
 - `references/issue-log.md` — symptom → cause → fix table. Check it whenever something looks broken, and check new work against it before delivering.

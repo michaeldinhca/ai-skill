@@ -108,6 +108,8 @@ setTimeout(fullWidthFix, 2000);
 
 ## When migrating an existing single-file HTML mockup into GHL
 
+Used both when a user hands over an existing single-file mockup, and as Phase 3 of this skill's own build flow (see `SKILL.md`) once a Phase 2 mockup has been reviewed and approved.
+
 - Split it into the 4 layers. Convert `:root`, `body`, `html` and `*` rules into `.{PREFIX}` scoped rules. Convert `rem` to `px`.
 - Move header and footer markup and their JS out of the page. Replace custom forms with the GHL embed. Replace relative image paths.
 - Anything shared goes to master CSS; anything page-only stays in the page block.

@@ -48,7 +48,7 @@ Fields marked `*` are required — if any are missing, stop and ask only for tho
 - `HOME_SECTIONS` blank = hero, problems, services, proof, process, FAQ, contact.
 - `FORM_EMBED`: the GHL iframe embed code.
 - `MOTION` blank = STANDARD (reveal on scroll, hover states). Options: MINIMAL, STANDARD, RICH (with one signature animation).
-- `EXISTING_MOCKUP`: file name or URL. If given, its look is the target — read/fetch it before designing.
+- `EXISTING_MOCKUP`: file name or URL. If given, its look is the target — read/fetch it before designing, and treat it as if it were already the Phase 2 output below (confirm it still fits with the user, then go straight to Phase 3 — no need to build a new mockup from scratch).
 - `DOMAIN`: if given and no mockup/brand assets are attached, fetch it and look at the client's current site before proposing colors/fonts/layout (see SKILL.md's visual-reference rule).
 
 ## Role
@@ -57,14 +57,22 @@ Act as a senior front-end developer, brand designer and conversion copywriter bu
 
 ## Steps
 
-1. Read the inputs and all attachments.
-2. If any required (`*`) field is empty, stop and ask only for those. Otherwise continue without asking.
-3. Write a short design guideline for this client: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules. It becomes the reference for every future page — treat it as a durable artifact, not throwaway output.
-4. Build L1 master CSS (with the shield and one token block), L2 header and L3 footer.
-5. Build the homepage body (L4), including JSON-LD for the business type.
-6. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
+This mode is homepage-only, and follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split) — each phase is its own response, gated on the user before moving to the next.
 
-## Output format (exactly these parts, in this order)
+1. Read the inputs and all attachments. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
+2. **Phase 1 (Plan)**: propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given). Keep it short. Stop and wait for approval.
+3. **Phase 2 (Mockup)**: build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules — real Unsplash images, motion/video where it earns its place, a real header and footer inline so it reads as a finished page. Stop and wait for comments; iterate on this one file until approved.
+4. **Phase 3 (Split)**: only once the mockup is approved —
+   a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules — formalizing what Phases 1-2 already settled. It becomes the reference for every future page on this site — treat it as a durable artifact.
+   b. Split the approved mockup into L1 master CSS (with the shield and one token block), L2 header, L3 footer, and L4 homepage body (with JSON-LD for the business type), per `platform-know-how.md`'s migration procedure.
+   c. Flag every Unsplash/stock-video URL carried over and ask whether to keep it or swap it for the client's Media Library upload.
+   d. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
+
+## Output format
+
+**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above — no GHL files yet.
+
+**Phase 3** delivers exactly these parts, in this order:
 
 - **PART 1**: Design guideline (markdown, to save as `{PREFIX}-DESIGN-GUIDELINES.md`)
 - **PART 2**: `01-site-head-code.html` (fonts + master CSS, one code block)
@@ -72,7 +80,7 @@ Act as a senior front-end developer, brand designer and conversion copywriter bu
 - **PART 4**: `03-global-footer.html` (one code block)
 - **PART 5**: `04-homepage-body.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters)
 - **PART 6**: GHL setup steps (where each file goes, form builder style values matching the tokens, chat widget colours)
-- **PART 7**: Placeholder list (every token or `[PLACEHOLDER]` left, and what is needed)
+- **PART 7**: Placeholder and media list (every token or `[PLACEHOLDER]` left and what is needed, plus the Unsplash/video URL keep-or-swap decision from step 4c)
 - **PART 8**: Self-check, PASS or FIXED per line:
   - shield present
   - all selectors scoped under `.{PREFIX}`

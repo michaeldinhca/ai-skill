@@ -76,19 +76,23 @@ Act as a senior front-end developer and conversion copywriter building ONE page 
 
 ## Steps
 
-1. Read the inputs and attachments. Note the master classes and reference patterns to reuse.
-2. If any required (`*`) field is empty, stop and ask only for those. Otherwise continue without asking.
-3. Outline the sections with one line of purpose each. Put the primary keyword in the H1, one H2 and the first paragraph.
-4. Write the copy.
-5. Build the code.
-6. Self-check every rule and fix before answering.
+This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split) — each phase is its own response, gated on the user before moving to the next. Mood and tone are already set by the design guideline, so Phase 1 here is lighter than in `new-site` — it's mainly about confirming this page's sections fit the established voice, not proposing a new one.
 
-## Output format (exactly these 5 parts)
+1. Read the inputs and attachments. Note the master classes and reference patterns to reuse. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
+2. **Phase 1 (Plan)**: propose this page's sections (from `SECTIONS`, or the blueprint for `PAGE_TYPE` below), and one line confirming how it fits the existing mood/tone from the design guideline. Put the primary keyword in the planned H1. Keep it short. Stop and wait for approval.
+3. **Phase 2 (Mockup)**: write the copy, then build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules — real Unsplash images, motion where it earns its place, and the site's real header/footer reconstructed inline (from the design guideline/reference page) so it can be judged as a finished page even though only the body ships to GHL. Stop and wait for comments; iterate on this one file until approved.
+4. **Phase 3 (Split)**: only once the mockup is approved, convert it into the page-body-only GHL code per the Page rules above, flag any Unsplash/stock-video URLs carried over and ask whether to keep or swap them, then self-check every rule below and fix before answering.
+
+## Output format
+
+**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above — no GHL code yet.
+
+**Phase 3** delivers exactly these 5 parts:
 
 - **PART 1**: GHL page settings: page name / URL slug / SEO title (max 60 characters) / meta description (150 to 160 characters) / social image
 - **PART 2**: Page outline (numbered, one line each)
 - **PART 3**: Complete code in one code block (no abbreviations, no "unchanged" comments)
-- **PART 4**: Placeholder list (or "None")
+- **PART 4**: Placeholder and media list (or "None") — include the Unsplash/video URL keep-or-swap decision from Phase 3
 - **PART 5**: Self-check, PASS or FIXED per line:
   - one H1
   - only provided facts
