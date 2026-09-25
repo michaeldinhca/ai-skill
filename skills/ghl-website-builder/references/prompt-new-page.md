@@ -72,7 +72,7 @@ Act as a senior front-end developer and conversion copywriter building ONE page 
 4. DARK_PHOTO or DARK_PLAIN: the first section gets class `{PREFIX}-hero` and enough top padding to clear the fixed header. LIGHT: do not use that class.
 5. The contact section has `id="contact"`.
 6. Use only facts from `SOURCE_CONTENT` and `VERIFIED_PROOF`. Where something is missing, insert `<span class="placeholder">[PLACEHOLDER: what is needed]</span>` — never fill the gap with an invented fact.
-7. Follow the client's copy rules from the design guideline (tone, banned words, anonymity, punctuation).
+7. Follow the client's copy rules from the design guideline (tone, banned words, anonymity, punctuation) plus the standing rule in the top-level `SKILL.md`: no em dashes anywhere a visitor reads.
 
 ## Steps
 
