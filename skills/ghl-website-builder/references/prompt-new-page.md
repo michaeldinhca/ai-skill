@@ -42,7 +42,7 @@ Fields marked `*` are required — if any are missing, stop and ask only for tho
 - `SECTIONS` blank = use the blueprint for `PAGE_TYPE` below.
 - `HERO_STYLE` blank = DARK_PHOTO if `HERO_MEDIA_URL` is given, otherwise DARK_PLAIN. Options: DARK_PHOTO, DARK_PLAIN, LIGHT.
 - `HERO_MEDIA_URL` and `OTHER_MEDIA`: GHL Media Library URLs. Missing = insert an `{IMAGE_URL_...}` token and list it.
-- `FORM_EMBED` blank = reuse the form embed from the attached reference page. Write NONE for no form.
+- `FORM_EMBED` blank = reuse the form embed from the attached reference page. Write NONE for no form. Even if this page embeds a different form than the site's main one, its Custom CSS is the same `05-form-custom-css.css` already built for this site — the skin is form-agnostic (built from generic form-builder DOM hooks, not one form's field names). Reuse that file and remind the client to paste it into the new form's own Custom CSS too, since GHL styles are per-form, not site-wide. Don't regenerate it unless the design guideline's tokens have changed.
 - `MOTION` blank = STANDARD.
 
 **Section blueprints**

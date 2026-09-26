@@ -92,9 +92,20 @@ setTimeout(fullWidthFix, 2000);
 
 ## Forms and chat
 
-- GHL form embeds are iframes. Site CSS cannot style anything inside them. Style forms in the GHL form builder (colours, font, field height, radius, button) and only style the panel around the iframe in code.
-- Keep GHL's `form_embed.js` script next to the iframe; it resizes the iframe automatically. Give the iframe a sensible starting height.
+- GHL form embeds are iframes. Site CSS cannot style anything inside them, so the fix lives in the form itself, not the page. **Every build ships a form skin**: a Custom CSS file, generated from `references/form-skin-template.css` using the site's design tokens, pasted into the form builder's Styles panel, Custom CSS field (exact menu wording may vary by GHL version — look for "Custom CSS" inside that form's own style settings). Without it, the native form renders as a plain white card with a default blue button no matter how dark or branded the rest of the site is.
+- GHL's own form CSS is heavy and marks its own rules `!important`. A plain selector like `.form-control:focus { border-color: X !important }` loses to GHL's own rule (observed: `#_builder-form .form-builder--item input[type="text"][class="form-control"]:focus`, specificity 1,4,1). Beat it by adding `html body` in front and an attribute selector after the class, e.g. `html body #_builder-form .form-builder--item input.form-control[class]:focus` (1,4,3) — the template applies this pattern to fields, hover, focus, the checkbox and the submit button's inline-styled label.
+- Custom CSS is set per form, not site-wide — if a site or page embeds more than one form, paste the same skin file into each form's own Custom CSS panel; it's form-agnostic (built from generic DOM hooks, not one form's field names) so the same file works unchanged across forms.
+- Keep GHL's `form_embed.js` script next to the iframe; it resizes the iframe automatically. Give the iframe a sensible starting height. **The iframe stays invisible (`opacity:0`, pulled offscreen) until a real form loads** — an unconfigured or placeholder embed looks empty, or collapses to about 50px tall. That is expected, not a bug; judge the layout only after the real form ID is in.
+- The form ID is the 20-character string after `/widget/form/` in the form's URL (e.g. `jXoVcMs6h4cDt7zRexF7`). White-label agencies serve forms from their own domain, not always `msgsndr.com`/`leadconnectorhq.com` — build both the iframe `src` and the `form_embed.js` `src` from the host in the form URL the client gives you. Ask for that URL rather than guessing the host.
 - Do not build custom HTML forms unless an endpoint (webhook) is supplied; GHL-native forms are what sync to the CRM and workflows.
+
+**Testing the form skin before delivering:**
+
+- If a browser automation tool is available, load the live form URL, wait for `input.form-control`, then inject the CSS (`page.addStyleTag`, or intercept the response and insert it into `<head>` before scripts run so the iframe auto-sizes the way it will in production).
+- To find out which GHL rule is winning a fight, use CDP's `CSS.forcePseudoState` (`hover`/`focus`) on the field, then read `CSS.getMatchedStylesForNode` for the highest-specificity `border*` rule — that's how the specificities above were established, and it's the fastest way to confirm a new override actually wins rather than guessing from the rendered colour.
+- To confirm it also works inside the real site, find the form's iframe among the page's frames (its URL contains `/widget/form/`) and inject the CSS there too; screenshot at 1440px and 390px with a field focused and the checkbox checked.
+- Pass criteria: no white background left on anything wider than 40px, the focused border is the accent colour, the submit label is the ink colour on the accent background, the checkbox is styled (not the native square) both unchecked and checked, and the privacy/terms links are readable against the background.
+- No browser automation available: at minimum, paste the CSS, open the live form in GHL Preview, and manually check the same things — especially hover/focus, since that's the state GHL's own `!important` rules fight hardest for.
 
 ## Media
 

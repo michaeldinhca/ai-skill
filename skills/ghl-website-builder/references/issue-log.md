@@ -9,7 +9,12 @@ Symptom, cause, fix — from real builds. Check this before diagnosing a "looks 
 | Headings dark or wrong font inside custom blocks | GHL theme styles h1-h3, p, a directly | Shield block in master CSS, all selectors scoped |
 | Nav or headline lost uppercase after adding a reset | Reset used `text-transform:none` | Use `inherit` in the shield |
 | Hero shows only the dark overlay | Relative image path or unreplaced image token | Media Library URL, test it in a new tab |
-| Form looks unstyled or does not match | GHL form is an iframe, site CSS cannot reach inside | Style it in the GHL form builder |
+| Form shows a white card and default blue button on a dark site | GHL form is an iframe, site CSS cannot reach inside | Paste the form skin (`05-form-custom-css.css`) into that form's own Styles panel, Custom CSS field |
+| Field border stays blue on hover/focus despite an `!important` override | GHL's own rule `#_builder-form .form-builder--item input[type="text"][class="form-control"]:focus` (specificity 1,4,1) wins | Use the heavier `html body #_builder-form .form-builder--item input.form-control[class]:focus` pattern (1,4,3) from `form-skin-template.css` |
+| Submit button text stays white after setting the button's colour | The label colour is an inline style on an inner div, not the button | Target `button.button-element *` with `!important`, not just the button |
+| Consent checkbox is a plain white square | Native browser checkbox control, unstyled | `appearance:none` with a dark box and an accent, checked-state background image |
+| Form panel is empty or collapsed to about 50px in Preview | Placeholder or wrong form ID; `form_embed.js` hides the iframe until a real form loads | Use the real form URL and its 20-character form ID, not a placeholder |
+| Form fails to load, or loads a different form, on a white-label account | Embed built against the wrong host | Build the iframe `src` and `form_embed.js` `src` from the host in the client's own form URL, not `msgsndr.com`/`leadconnectorhq.com` by default |
 | Back-to-top hidden behind chat bubble | Both bottom-right | Back-to-top bottom-left |
 | Code "does nothing" in the editor | GHL builder canvas does not run custom JS | Check in Preview or live |
 | Menu links reload the homepage | Homepage served at /home while links point to "/#id" | Homepage at "/", redirect /home, link rewrite script |

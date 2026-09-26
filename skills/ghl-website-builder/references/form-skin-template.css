@@ -1,0 +1,178 @@
+/* ============================================================
+   05 FORM CUSTOM CSS TEMPLATE
+   Paste into: the form's own Styles panel, Custom CSS field (open the form in the form
+   builder, not the site or page editor — exact menu wording may vary by GHL version).
+   A GHL form is served as an iframe. The site's own CSS cannot reach into it, so this file
+   is the only way to make the native contact form match the site, and it belongs in the
+   FORM's Custom CSS, never in the site head code or a page body.
+
+   Fill in every {TOKEN} from the client's design guideline before delivering:
+     {FORM_TEXT}          field text colour                                    e.g. #EDEBE6
+     {FORM_MUTED}         labels, consent text, links, field icons             e.g. #8C9099
+     {FORM_DIM}           placeholder text                                     e.g. #5A5F69
+     {FORM_FIELD_BG}      input / textarea / select background                e.g. #0C0E13
+     {FORM_BORDER}        default field border                                 e.g. #2A2E36
+     {FORM_BORDER_HOVER}  field border on hover, and the checkbox's own border  e.g. #3A404C
+     {ACCENT}             focus border, checked checkbox, submit background    e.g. #C6F432
+     {ACCENT_HOVER}       submit button hover background                       e.g. #D6FF55
+     {ACCENT_INK}         text/icon colour that sits ON the accent background  e.g. #0B1200
+     {ACCENT_INK_ENC}     ACCENT_INK with # replaced by %23 (for the checkbox's data-URI SVG stroke) e.g. %230B1200
+     {ACCENT_RGB}         ACCENT as three comma-separated decimals, for the focus glow  e.g. 198,244,50
+     {ERROR}              validation/error text colour                         e.g. #FF8A7A
+     {BODY_FONT}          the site's body font family name                     e.g. Geist
+     {LABEL_FONT}         the site's mono/label font family name (repeat BODY_FONT if there isn't one) e.g. Geist Mono
+     {FONT_IMPORT_URL}    the Google Fonts @import URL covering BODY_FONT and LABEL_FONT
+
+   This works the same way on a light-themed site: the selectors below never change, only
+   the token VALUES do (light FORM_FIELD_BG, dark FORM_TEXT, and so on). Do not add or
+   remove selectors per theme — they were checked against GHL's own live form CSS and are
+   deliberately heavy (html body #_builder-form ... plus an attribute selector) because GHL
+   ships lighter selectors marked !important that would otherwise win. See
+   platform-know-how.md's "Forms and chat" section for why, and how to verify a build still
+   beats GHL's rules before delivering it.
+============================================================ */
+@import url('{FONT_IMPORT_URL}');
+
+/* transparent shell so the site's own panel/background shows through the iframe */
+html, body, #app, .hl-app, #hl_form_builder_main, #form-builder, .ghl-form-wrap,
+.form-builder--wrap, #_builder-form, .form-side, .fields-container, .form-field-container {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#_builder-form, .form-builder--wrap {
+  border: none !important;
+  padding: 4px 2px !important;
+  max-width: 100% !important;
+}
+#_builder-form, #_builder-form * {
+  font-family: '{BODY_FONT}', Inter, system-ui, sans-serif !important;
+}
+
+/* labels */
+#_builder-form .field-label, #_builder-form .label-alignment {
+  color: {FORM_MUTED} !important;
+  font-family: '{LABEL_FONT}', ui-monospace, monospace !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: .12em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 8px !important;
+}
+
+/* fields: selectors are deliberately heavy to beat GHL's own !important field rules */
+html body #_builder-form .form-builder--item input.form-control[class],
+html body #_builder-form .form-builder--item input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"])[class],
+html body #_builder-form .form-builder--item textarea[class],
+html body #_builder-form .form-builder--item select[class],
+html body #_builder-form .form-builder--item .date-picker-custom-style[class] {
+  background: {FORM_FIELD_BG} !important;
+  color: {FORM_TEXT} !important;
+  border: 1px solid {FORM_BORDER} !important;
+  border-radius: 12px !important;
+  min-height: 52px !important;
+  font-size: 16px !important;
+  box-shadow: none !important;
+  transition: border-color .25s, box-shadow .25s !important;
+}
+html body #_builder-form .form-builder--item textarea[class] { min-height: 120px !important; padding-top: 14px !important; }
+html body #_builder-form .form-builder--item input.form-control[class]:hover,
+html body #_builder-form .form-builder--item input:not([type="checkbox"]):not([type="radio"])[class]:hover,
+html body #_builder-form .form-builder--item textarea[class]:hover,
+html body #_builder-form .form-builder--item select[class]:hover {
+  border-color: {FORM_BORDER_HOVER} !important;
+}
+html body #_builder-form .form-builder--item input.form-control[class]:focus,
+html body #_builder-form .form-builder--item input:not([type="checkbox"]):not([type="radio"])[class]:focus,
+html body #_builder-form .form-builder--item textarea[class]:focus,
+html body #_builder-form .form-builder--item select[class]:focus {
+  border-color: {ACCENT} !important;
+  box-shadow: 0 0 0 3px rgba({ACCENT_RGB}, .15) !important;
+  outline: none !important;
+}
+#_builder-form ::placeholder { color: {FORM_DIM} !important; opacity: 1 !important; }
+#_builder-form input:-webkit-autofill {
+  -webkit-text-fill-color: {FORM_TEXT} !important;
+  -webkit-box-shadow: 0 0 0 1000px {FORM_FIELD_BG} inset !important;
+}
+
+/* icons inside fields (email envelope, phone flag caret) */
+#_builder-form .form-builder--item svg { color: {FORM_MUTED} !important; stroke: currentColor; }
+
+/* phone input wrapper and country dropdown */
+#_builder-form .vti__dropdown, #_builder-form .vue-tel-input,
+#_builder-form .iti, #_builder-form .phone-input-wrapper {
+  background: {FORM_FIELD_BG} !important;
+  border-color: {FORM_BORDER} !important;
+  border-radius: 12px !important;
+  color: {FORM_TEXT} !important;
+}
+#_builder-form .vti__dropdown-list, #_builder-form .iti__country-list {
+  background: {FORM_FIELD_BG} !important;
+  color: {FORM_TEXT} !important;
+  border: 1px solid {FORM_BORDER} !important;
+}
+
+/* consent checkbox and text */
+#_builder-form .terms-and-conditions, #_builder-form .terms-and-conditions *,
+#_builder-form .checkbox-container, #_builder-form .checkbox-container * {
+  color: {FORM_MUTED} !important;
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+}
+#_builder-form .terms-and-conditions strong, #_builder-form .terms-and-conditions b { color: {FORM_TEXT} !important; }
+html body #_builder-form input[type="checkbox"][id] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  margin-top: 2px !important;
+  background: {FORM_FIELD_BG} !important;
+  border: 1px solid {FORM_BORDER_HOVER} !important;
+  border-radius: 6px !important;
+  cursor: pointer;
+  transition: background-color .2s, border-color .2s !important;
+}
+html body #_builder-form input[type="checkbox"][id]:checked {
+  background: {ACCENT} url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='{ACCENT_INK_ENC}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 14px no-repeat !important;
+  border-color: {ACCENT} !important;
+}
+html body #_builder-form input[type="checkbox"][id]:focus-visible {
+  outline: 2px solid {ACCENT} !important;
+  outline-offset: 2px !important;
+}
+
+/* submit button: label colour is an inline style on an inner div, so it needs !important on a wildcard to win */
+#_builder-form .form-builder--btn-submit button,
+#_builder-form button.button-element {
+  background: {ACCENT} !important;
+  color: {ACCENT_INK} !important;
+  border: none !important;
+  border-radius: 999px !important;
+  height: 54px !important;
+  width: 100% !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  box-shadow: none !important;
+  transition: background-color .3s, transform .4s cubic-bezier(.22, 1, .36, 1) !important;
+}
+#_builder-form .form-builder--btn-submit button *,
+#_builder-form button.button-element * {
+  color: {ACCENT_INK} !important;
+  font-weight: 600 !important;
+}
+#_builder-form .form-builder--btn-submit button:hover,
+#_builder-form button.button-element:hover {
+  background: {ACCENT_HOVER} !important;
+  transform: translateY(-2px);
+}
+
+/* links (privacy / terms) and validation */
+#_builder-form a { color: {FORM_MUTED} !important; text-decoration: underline !important; text-underline-offset: 3px; }
+#_builder-form a:hover { color: {ACCENT} !important; }
+#_builder-form .error, #_builder-form .invalid-feedback, #_builder-form .text-danger { color: {ERROR} !important; }
+
+/* thank-you message after submit */
+.ghl-form-wrap .thank-you-message, .ghl-form-wrap .form-builder--thankyou,
+.ghl-form-wrap [class*="thank"] { color: {FORM_TEXT} !important; }
