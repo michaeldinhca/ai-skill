@@ -67,30 +67,34 @@ This mode is homepage-only, and follows the 3-phase Build flow from the top-leve
 4. **Phase 3 (Split)**: only once the mockup is approved —
    a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules — formalizing what Phases 1-2 already settled. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site — treat it as a durable artifact.
    b. Split the approved mockup into L1 master CSS (with the shield and one token block), L2 header, L3 footer, and L4 homepage body (with JSON-LD for the business type), per `platform-know-how.md`'s migration procedure.
-   c. Generate `05-form-custom-css.css` from `references/form-skin-template.css`, filling every token from the same tokens used in L1 — this is not optional, a plain form builder colour picker does not survive GHL's own `!important` field rules (see `platform-know-how.md`'s "Forms and chat"). Test it against the live form at `FORM_URL` per that section's testing method before delivering it.
-   d. Flag every Unsplash/stock-video URL carried over and ask whether to keep it or swap it for the client's Media Library upload.
-   e. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
+   c. Generate `global/04-form-custom-css.css` from `references/form-skin-template.css`, filling every token from the same tokens used in L1 — this is not optional, a plain form builder colour picker does not survive GHL's own `!important` field rules (see `platform-know-how.md`'s "Forms and chat"). Test it against the live form at `FORM_URL` per that section's testing method before delivering it.
+   d. Build the two standard utility pages using the same tokens, header and footer as the homepage: `pages/404.html` and `pages/thank-you.html`. Every `new-site` build ships these alongside the homepage — see `platform-know-how.md`'s "Utility pages" for what each one needs and how it gets wired up in GHL (domain 404 assignment, form on-submit redirect). They don't get their own Plan/Mockup round trip; build them directly here from what Phases 1-2 already established.
+   e. Flag every Unsplash/stock-video URL carried over and ask whether to keep it or swap it for the client's Media Library upload.
+   f. Create the `{PREFIX}-ghl-site/` project folder and write every file into it at the paths in `SKILL.md`'s "Delivery" section, including `SETUP.md` for the GHL setup steps — this is the durable copy, not just what's shown in the response.
+   g. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
 
 ## Output format
 
 **Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above — no GHL files yet.
 
-**Phase 3** delivers exactly these parts, in this order:
+**Phase 3** delivers exactly these parts, in this order, written into `{PREFIX}-ghl-site/` per `SKILL.md`'s "Delivery" section (and still shown in the response, so it can be reviewed there too):
 
-- **PART 1**: Design guideline (markdown, to save as `{PREFIX}-DESIGN-GUIDELINES.md`)
-- **PART 2**: `01-site-head-code.html` (fonts + master CSS, one code block)
-- **PART 3**: `02-global-header.html` (one code block)
-- **PART 4**: `03-global-footer.html` (one code block)
-- **PART 5**: `04-homepage-body.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters)
-- **PART 6**: `05-form-custom-css.css` (one code block, tokens filled in, no literal `{TOKEN}` left)
-- **PART 7**: GHL setup steps (where each file goes — including "paste `05-form-custom-css.css` into the form's Styles panel, Custom CSS field", not the site head code — chat widget colours)
-- **PART 8**: Placeholder and media list (every token or `[PLACEHOLDER]` left and what is needed, plus the Unsplash/video URL keep-or-swap decision from step 4d)
-- **PART 9**: Self-check, PASS or FIXED per line:
+- **PART 1**: Design guideline (`{PREFIX}-DESIGN-GUIDELINES.md`)
+- **PART 2**: `global/01-site-head-code.html` (fonts + master CSS, one code block)
+- **PART 3**: `global/02-global-header.html` (one code block)
+- **PART 4**: `global/03-global-footer.html` (one code block)
+- **PART 5**: `pages/home.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters)
+- **PART 6**: `pages/404.html` (one code block; GHL page settings comment; note it isn't linked in nav and gets assigned as the domain's 404 page, not published to a nav-reachable slug)
+- **PART 7**: `pages/thank-you.html` (one code block; GHL page settings comment; note it isn't linked in nav and is reached only via the form's on-submit redirect)
+- **PART 8**: `global/04-form-custom-css.css` (one code block, tokens filled in, no literal `{TOKEN}` left)
+- **PART 9**: `SETUP.md` (GHL setup steps: where each file goes, the domain's 404 page assignment, the form's on-submit redirect to the thank you page's URL, form builder style values matching the tokens, chat widget colours)
+- **PART 10**: Placeholder and media list (every token or `[PLACEHOLDER]` left and what is needed, plus the Unsplash/video URL keep-or-swap decision from step 4e)
+- **PART 11**: Self-check, PASS or FIXED per line:
   - shield present
   - all selectors scoped under `.{PREFIX}`
   - px not rem
   - tokens in one block
-  - full-width script in header, footer, body
+  - full-width script in header, footer, every page body
   - header transparent over hero, solid elsewhere
   - spacer logic
   - `/#id` link rewrite
@@ -100,7 +104,11 @@ This mode is homepage-only, and follows the 3-phase Build flow from the top-leve
   - no relative image paths
   - GHL form iframe + embed script, host matches `FORM_URL`
   - form skin generated from `form-skin-template.css`, no literal `{TOKEN}` left, tested against the live form (field, hover, focus, checkbox, submit label)
-  - one H1
+  - 404 and thank you pages built with the same tokens, header and footer as home, and not linked in nav
+  - `SETUP.md` documents the domain's 404 assignment and the form's on-submit redirect target
+  - all files written into `{PREFIX}-ghl-site/` at the paths above
+  - no em dashes or en dashes anywhere a visitor reads
+  - one H1 per page
   - title and meta not in code
   - reduced motion respected
   - no horizontal scroll at 375, 800, 1440

@@ -112,6 +112,13 @@ setTimeout(fullWidthFix, 2000);
 - Never use relative paths (`./hero.jpg`). GHL cannot serve them. Use GHL Media Library URLs. If a URL is not provided, insert the token `{IMAGE_URL_description}` in the `src` and list it.
 - No base64 images. Keep each code element under about 60 KB. If a block is larger, deliver it so it can be split into two elements: (A) style + markup, (B) script.
 
+## Utility pages: 404 and thank you
+
+Every site ships with these two pages alongside the homepage, built as ordinary L4 page bodies (same header, footer, tokens and full-width script as any other page — not a stripped-down unbranded page). Neither goes in the main nav.
+
+- **404 page**: short, on-brand — a line acknowledging the page wasn't found and a way back (link or button to the homepage, optionally to a couple of key pages). Assign it under Settings > Domains: find the domain, open its three-dot menu > Edit, and set it as that domain's 404/Error page from the dropdown of eligible pages. Exact wording can vary by GHL version — look for "404" or "Error Page" in the domain's own settings, not the site or page settings.
+- **Thank you page**: confirms the form submission landed and says what happens next, using only facts already established for the site (don't invent a response-time promise that wasn't given). Not linked from navigation; visitors only reach it after submitting. Wire it up in the form builder, not the site: open the form's Styles and Options (gear icon) > Options tab > On Submit, change it from the default message to redirect, and paste this page's full published URL (with `https://`). A dedicated page beats GHL's inline "thank you" message whenever the client wants ad conversion tracking on that URL.
+
 ## SEO
 
 - One H1 per page. Title, meta, H1 and JSON-LD never change based on visitor location or script.

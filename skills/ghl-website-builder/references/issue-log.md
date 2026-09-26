@@ -9,7 +9,7 @@ Symptom, cause, fix — from real builds. Check this before diagnosing a "looks 
 | Headings dark or wrong font inside custom blocks | GHL theme styles h1-h3, p, a directly | Shield block in master CSS, all selectors scoped |
 | Nav or headline lost uppercase after adding a reset | Reset used `text-transform:none` | Use `inherit` in the shield |
 | Hero shows only the dark overlay | Relative image path or unreplaced image token | Media Library URL, test it in a new tab |
-| Form shows a white card and default blue button on a dark site | GHL form is an iframe, site CSS cannot reach inside | Paste the form skin (`05-form-custom-css.css`) into that form's own Styles panel, Custom CSS field |
+| Form shows a white card and default blue button on a dark site | GHL form is an iframe, site CSS cannot reach inside | Paste the form skin (`global/04-form-custom-css.css`) into that form's own Styles panel, Custom CSS field |
 | Field border stays blue on hover/focus despite an `!important` override | GHL's own rule `#_builder-form .form-builder--item input[type="text"][class="form-control"]:focus` (specificity 1,4,1) wins | Use the heavier `html body #_builder-form .form-builder--item input.form-control[class]:focus` pattern (1,4,3) from `form-skin-template.css` |
 | Submit button text stays white after setting the button's colour | The label colour is an inline style on an inner div, not the button | Target `button.button-element *` with `!important`, not just the button |
 | Consent checkbox is a plain white square | Native browser checkbox control, unstyled | `appearance:none` with a dark box and an accent, checked-state background image |
@@ -23,3 +23,5 @@ Symptom, cause, fix — from real builds. Check this before diagnosing a "looks 
 | Sizes slightly off vs mockup | rem depends on GHL root font size | Convert rem to px |
 | Saved page source is huge and unreadable | Saved as "Webpage, Single File" (.mhtml) | Save as "Webpage, HTML Only", or DevTools > copy outerHTML |
 | GHL editor slow or code cut off | Very large code element | Keep under 60 KB or split style+markup and script into two elements |
+| GHL's default "Page Not Found" shows instead of the branded 404 page | The domain's 404 page setting isn't pointed at `pages/404.html`'s published page | Settings > Domains > the domain's three-dot menu > Edit > set the 404/Error page |
+| Form submission shows an inline "thank you" message instead of the thank you page | The form's Options tab > On Submit is still set to the default message | Switch it to redirect and paste `pages/thank-you.html`'s full published URL (with `https://`) |

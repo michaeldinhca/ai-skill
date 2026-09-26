@@ -54,7 +54,32 @@ Deliver the single file, then stop and ask for comments. Iterate on this same si
 
 **Phase 3 — Split into GHL**
 
-Only once the mockup is approved, split it into the 4-layer GHL structure using the migration procedure in `references/platform-know-how.md` ("When migrating an existing single-file HTML mockup into GHL") — that procedure exists for exactly this handoff, whether the single file came from this skill's own Phase 2 or from something the user handed you directly. Before delivering, flag every Unsplash/stock-video URL carried over from the mockup and ask whether to keep it (it renders fine in GHL — it's just an external image/video URL) or swap it for the client's own Media Library upload. Then follow the mode's own output format in `references/prompt-new-site.md` or `references/prompt-new-page.md` for what to deliver.
+Only once the mockup is approved, split it into the 4-layer GHL structure using the migration procedure in `references/platform-know-how.md` ("When migrating an existing single-file HTML mockup into GHL") — that procedure exists for exactly this handoff, whether the single file came from this skill's own Phase 2 or from something the user handed you directly. Before delivering, flag every Unsplash/stock-video URL carried over from the mockup and ask whether to keep it (it renders fine in GHL — it's just an external image/video URL) or swap it for the client's own Media Library upload. In `new-site`, this phase also bundles the site's two standard utility pages (404, thank you) alongside the homepage — see `references/prompt-new-site.md`, they don't get their own Plan/Mockup round trip. Then follow the mode's own output format in `references/prompt-new-site.md` or `references/prompt-new-page.md` for what to deliver.
+
+## Delivery: one project folder per site
+
+Every `new-site` build lives in one project folder, and every later `new-page` or `fix` on that site reuses the same folder — this is what makes it a real foundation for a multi-page site instead of a pile of loose files that gets harder to track with every page added.
+
+```
+{PREFIX}-ghl-site/
+├── {PREFIX}-DESIGN-GUIDELINES.md
+├── SETUP.md
+├── global/
+│   ├── 01-site-head-code.html
+│   ├── 02-global-header.html
+│   ├── 03-global-footer.html
+│   └── 04-form-custom-css.css
+└── pages/
+    ├── home.html
+    ├── 404.html
+    ├── thank-you.html
+    └── <slug>.html         (one per page added later via new-page)
+```
+
+- **`new-site`** creates this folder and writes every Phase 3 file into it directly, using whatever file-creation capability is available in the current environment, rather than leaving the only copy in a chat code block. Still show the content in the response too, so it can be reviewed there — the folder is the durable copy, not a replacement for review.
+- **`new-page`** adds exactly one file, `pages/<slug>.html`, into that same existing folder. If you can't tell where a site's project folder lives, ask before creating a new one — a second folder for the same site forks the source of truth.
+- **`fix`** edits the one file in place inside that folder and reports the path it touched.
+- Nothing about the GHL-side install changes because of this: these are still individual Custom HTML/JS and Custom CSS pastes in GHL, exactly as `references/qa-checklist.md` describes. The folder is where the source lives on your side, not a GHL concept.
 
 ## After building
 
@@ -67,4 +92,5 @@ Only once the mockup is approved, split it into the 4-layer GHL structure using 
 - `{PREFIX}` and other `{TOKEN}` placeholders get substituted with the actual client values throughout, including inside code — never leave a literal `{PREFIX}` in delivered code.
 - Deliver complete files, not diffs or "...unchanged..." placeholders, except in `fix` mode where only the one changed file is expected.
 - Never use an em dash or en dash in any client-facing copy: headlines, body text, CTAs, alt text, meta descriptions, everything a site visitor reads. It is one of the clearest tells that text was AI-written, and the whole point of this skill is copy a real client can put in front of real customers without it reading that way. Use a period, comma, colon, or a rewritten sentence instead. This applies in Phase 1 and Phase 2 copy, not only the final Phase 3 files.
-- Forms are styled through the form skin (`references/form-skin-template.css`, delivered as `05-form-custom-css.css`), never through site CSS — a GHL form is an iframe and site CSS cannot reach it. See `platform-know-how.md`'s "Forms and chat" for the full rule.
+- Forms are styled through the form skin (`references/form-skin-template.css`, delivered as `global/04-form-custom-css.css`), never through site CSS — a GHL form is an iframe and site CSS cannot reach it. See `platform-know-how.md`'s "Forms and chat" for the full rule.
+- Every `new-site` build bundles a 404 page and a thank you page with the homepage — never deliver a homepage alone. See `platform-know-how.md`'s "Utility pages" for what each one needs and how it's wired up in GHL.
