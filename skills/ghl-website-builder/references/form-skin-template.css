@@ -1,7 +1,7 @@
 /* ============================================================
    FORM CUSTOM CSS TEMPLATE (delivered as global/04-form-custom-css.css)
    Paste into: the form's own Styles panel, Custom CSS field (open the form in the form
-   builder, not the site or page editor — exact menu wording may vary by GHL version).
+   builder, not the site or page editor. Exact menu wording may vary by GHL version).
    A GHL form is served as an iframe. The site's own CSS cannot reach into it, so this file
    is the only way to make the native contact form match the site, and it belongs in the
    FORM's Custom CSS, never in the site head code or a page body.
@@ -26,7 +26,7 @@
 
    This works the same way on a light-themed site: the selectors below never change, only
    the token VALUES do (light FORM_FIELD_BG, dark FORM_TEXT, and so on). Do not add or
-   remove selectors per theme — they were checked against GHL's own live form CSS and are
+   remove selectors per theme. They were checked against GHL's own live form CSS and are
    deliberately heavy (html body #_builder-form ... plus an attribute selector) because GHL
    ships lighter selectors marked !important that would otherwise win. See
    platform-know-how.md's "Forms and chat" section for why, and how to verify a build still

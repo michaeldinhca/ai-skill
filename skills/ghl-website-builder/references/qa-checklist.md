@@ -2,7 +2,7 @@
 
 Hand this to the user (or walk through it together) once a `new-site` or `new-page` deliverable is ready to go into GHL.
 
-All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder — see `SKILL.md`'s "Delivery" section for the full layout.
+All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. See `SKILL.md`'s "Delivery" section for the full layout.
 
 ## Install order for a new site
 

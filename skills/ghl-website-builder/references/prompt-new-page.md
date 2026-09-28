@@ -1,8 +1,8 @@
 # Mode: new-page
 
-Building ONE new page body for a GoHighLevel website that already has its 4 layers built. You've already read `platform-know-how.md`. This mode also needs the client's design guideline (from a prior `new-site` run) and a finished reference page attached — ask for them if missing, per the visual-reference rule in the top-level SKILL.md.
+Building ONE new page body for a GoHighLevel website that already has its 4 layers built. You've already read `platform-know-how.md`. This mode also needs the client's design guideline (from a prior `new-site` run) and a finished reference page attached. Ask for them if missing, per the visual-reference rule in the top-level SKILL.md.
 
-This page's file goes into the site's existing `{PREFIX}-ghl-site/` project folder, at `pages/{SLUG}.html` — see `SKILL.md`'s "Delivery" section. If you can't tell where that folder is, ask rather than starting a new one. If the site doesn't have a `pages/404.html` or `pages/thank-you.html` yet (it was built before this rule existed), mention that once and offer to add them using the same bundle approach as `new-site` Phase 3 — but don't block this page on it unless the user wants that first.
+This page's file goes into the site's existing `{PREFIX}-ghl-site/` project folder, at `pages/{SLUG}.html`. See `SKILL.md`'s "Delivery" section. If you can't tell where that folder is, ask rather than starting a new one. If the site doesn't have a `pages/404.html` or `pages/thank-you.html` yet (it was built before this rule existed), mention that once and offer to add them using the same bundle approach as `new-site` Phase 3. But don't block this page on it unless the user wants that first.
 
 ## Inputs
 
@@ -30,7 +30,7 @@ MOTION:
 EXTRA:
 ```
 
-Fields marked `*` are required — if any are missing, stop and ask only for those before generating anything.
+Fields marked `*` are required. If any are missing, stop and ask only for those before generating anything.
 
 **Field meanings and defaults**
 
@@ -44,7 +44,7 @@ Fields marked `*` are required — if any are missing, stop and ask only for tho
 - `SECTIONS` blank = use the blueprint for `PAGE_TYPE` below.
 - `HERO_STYLE` blank = DARK_PHOTO if `HERO_MEDIA_URL` is given, otherwise DARK_PLAIN. Options: DARK_PHOTO, DARK_PLAIN, LIGHT.
 - `HERO_MEDIA_URL` and `OTHER_MEDIA`: GHL Media Library URLs. Missing = insert an `{IMAGE_URL_...}` token and list it.
-- `FORM_EMBED` blank = reuse the form embed from the attached reference page. Write NONE for no form. Even if this page embeds a different form than the site's main one, its Custom CSS is the same `global/04-form-custom-css.css` already built for this site — the skin is form-agnostic (built from generic form-builder DOM hooks, not one form's field names). Reuse that file and remind the client to paste it into the new form's own Custom CSS too, since GHL styles are per-form, not site-wide. Don't regenerate it unless the design guideline's tokens have changed.
+- `FORM_EMBED` blank = reuse the form embed from the attached reference page. Write NONE for no form. Even if this page embeds a different form than the site's main one, its Custom CSS is the same `global/04-form-custom-css.css` already built for this site. The skin is form-agnostic (built from generic form-builder DOM hooks, not one form's field names). Reuse that file and remind the client to paste it into the new form's own Custom CSS too, since GHL styles are per-form, not site-wide. Don't regenerate it unless the design guideline's tokens have changed.
 - `MOTION` blank = STANDARD.
 
 **Section blueprints**
@@ -58,7 +58,7 @@ Fields marked `*` are required — if any are missing, stop and ask only for tho
 
 ## Role
 
-Act as a senior front-end developer and conversion copywriter building ONE page body for a GoHighLevel website. Follow `platform-know-how.md`, the attached design guideline and the attached reference page exactly. The page must look like it belongs to the same site — don't reinvent visual language.
+Act as a senior front-end developer and conversion copywriter building ONE page body for a GoHighLevel website. Follow `platform-know-how.md`, the attached design guideline and the attached reference page exactly. The page must look like it belongs to the same site. Don't reinvent visual language.
 
 ## Page rules
 
@@ -73,28 +73,28 @@ Act as a senior front-end developer and conversion copywriter building ONE page 
 3. Reuse master CSS classes first. New CSS is scoped under `.page-{SLUG}`.
 4. DARK_PHOTO or DARK_PLAIN: the first section gets class `{PREFIX}-hero` and enough top padding to clear the fixed header. LIGHT: do not use that class.
 5. The contact section has `id="contact"`.
-6. Use only facts from `SOURCE_CONTENT` and `VERIFIED_PROOF`. Where something is missing, insert `<span class="placeholder">[PLACEHOLDER: what is needed]</span>` — never fill the gap with an invented fact.
+6. Use only facts from `SOURCE_CONTENT` and `VERIFIED_PROOF`. Where something is missing, insert `<span class="placeholder">[PLACEHOLDER: what is needed]</span>`. Never fill the gap with an invented fact.
 7. Follow the client's copy rules from the design guideline (tone, banned words, anonymity, punctuation) plus the standing rule in the top-level `SKILL.md`: no em dashes anywhere a visitor reads.
 
 ## Steps
 
-This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split) — each phase is its own response, gated on the user before moving to the next. Mood and tone are already set by the design guideline, so Phase 1 here is lighter than in `new-site` — it's mainly about confirming this page's sections fit the established voice, not proposing a new one.
+This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split). Each phase is its own response, gated on the user before moving to the next. Mood and tone are already set by the design guideline, so Phase 1 here is lighter than in `new-site`. It's mainly about confirming this page's sections fit the established voice, not proposing a new one.
 
 1. Read the inputs and attachments. Note the master classes and reference patterns to reuse. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
 2. **Phase 1 (Plan)**: propose this page's sections (from `SECTIONS`, or the blueprint for `PAGE_TYPE` below), and one line confirming how it fits the existing mood/tone from the design guideline. Put the primary keyword in the planned H1. Keep it short. Stop and wait for approval.
-3. **Phase 2 (Mockup)**: write the copy, then build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules — real Unsplash images, motion where it earns its place, and the site's real header/footer reconstructed inline (from the design guideline/reference page) so it can be judged as a finished page even though only the body ships to GHL. Stop and wait for comments; iterate on this one file until approved.
+3. **Phase 2 (Mockup)**: write the copy, then build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules: real Unsplash images, motion where it earns its place, and the site's real header/footer reconstructed inline (from the design guideline/reference page) so it can be judged as a finished page even though only the body ships to GHL. Stop and wait for comments; iterate on this one file until approved.
 4. **Phase 3 (Split)**: only once the mockup is approved, convert it into the page-body-only GHL code per the Page rules above, flag any Unsplash/stock-video URLs carried over and ask whether to keep or swap them, write it to `pages/{SLUG}.html` in the site's existing project folder, then self-check every rule below and fix before answering.
 
 ## Output format
 
-**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above — no GHL code yet.
+**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above. No GHL code yet.
 
 **Phase 3** delivers exactly these 5 parts:
 
 - **PART 1**: GHL page settings: page name / URL slug / SEO title (max 60 characters) / meta description (150 to 160 characters) / social image
 - **PART 2**: Page outline (numbered, one line each)
 - **PART 3**: Complete code in one code block (no abbreviations, no "unchanged" comments), also written to `pages/{SLUG}.html` in the site's project folder
-- **PART 4**: Placeholder and media list (or "None") — include the Unsplash/video URL keep-or-swap decision from Phase 3
+- **PART 4**: Placeholder and media list (or "None"). Include the Unsplash/video URL keep-or-swap decision from Phase 3
 - **PART 5**: Self-check, PASS or FIXED per line:
   - one H1
   - only provided facts

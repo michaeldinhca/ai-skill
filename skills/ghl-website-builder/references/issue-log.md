@@ -1,6 +1,6 @@
 # Issue log
 
-Symptom, cause, fix — from real builds. Check this before diagnosing a "looks wrong" report from scratch, and check new work against it before delivering.
+Symptom, cause and fix, from real builds. Check this before diagnosing a "looks wrong" report from scratch, and check new work against it before delivering.
 
 | Symptom | Cause | Fix |
 |---|---|---|
