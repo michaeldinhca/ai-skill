@@ -39,6 +39,7 @@ Propose, in a few lines each:
 - Sections for this page (a plain list, e.g. hero / problems / services / proof / process / FAQ / contact)
 - Mood (a handful of words, e.g. "confident, industrial, no-nonsense")
 - Tone (a handful of words, e.g. "direct, plain-English, a little blunt")
+- Fonts (`new-site` only): if the client gave fonts, state them and use them. Otherwise offer two pairings from `references/font-library.md` that fit the mood, tone and business, avoiding ones used on recent builds. Follow that file's rules; client-supplied fonts are never swapped without an explicit yes.
 
 Keep it short — this is a fast alignment check, not the full design guideline. Stop and ask for feedback before writing any code. If the user adjusts something, restate the plan briefly and check again before moving on.
 

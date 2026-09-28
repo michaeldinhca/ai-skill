@@ -42,7 +42,7 @@ Fields marked `*` are required — if any are missing, stop and ask only for tho
 - `MAIN_CTA`: the primary action, e.g. "Book a free estimate".
 - `PROOF`: approved testimonials, metrics, certifications. Blank = use no proof claims — never invent one.
 - `TONE` blank = direct, practical, plain English. `AVOID` and `ANONYMITY` blank = no extra restrictions.
-- `COLOURS` blank = propose a palette (dark, light, accent, muted, borders), but only after asking about / receiving brand assets per the visual-reference rule in the top-level SKILL.md. `FONTS` blank = propose a Google Fonts pairing.
+- `COLOURS` blank = propose a palette (dark, light, accent, muted, borders), but only after asking about / receiving brand assets per the visual-reference rule in the top-level SKILL.md. `FONTS`: if given, these are the fonts; you may suggest an alternative once with a reason, but keep the given fonts unless the user explicitly approves a switch. Blank = pick from `references/font-library.md` per its rules (fit to mood, tone and business; skip recently used pairings; offer two options in Phase 1).
 - `LOGO_URL` blank = text wordmark. `HERO_MEDIA_URL` blank = insert `{IMAGE_URL_hero}` and list it.
 - `NAV_PAGES`: label=URL pairs. Blank = Services, About, Contact (`/#contact`).
 - `FOOTER_CONTENT`: address, phone, email, hours, link groups. Blank = placeholders.
@@ -62,10 +62,10 @@ Act as a senior front-end developer, brand designer and conversion copywriter bu
 This mode is homepage-only, and follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split) — each phase is its own response, gated on the user before moving to the next.
 
 1. Read the inputs and all attachments. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
-2. **Phase 1 (Plan)**: propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given). Keep it short. Stop and wait for approval.
+2. **Phase 1 (Plan)**: propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given), and fonts (the client's `FONTS` if given, otherwise two options from `references/font-library.md`). Keep it short. Stop and wait for approval.
 3. **Phase 2 (Mockup)**: build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules — real Unsplash images, motion/video where it earns its place, a real header and footer inline so it reads as a finished page. Stop and wait for comments; iterate on this one file until approved.
 4. **Phase 3 (Split)**: only once the mockup is approved —
-   a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules — formalizing what Phases 1-2 already settled. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site — treat it as a durable artifact.
+   a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules — formalizing what Phases 1-2 already settled. Record the font pairing by name and source (Google Fonts or Fontshare) so later builds can avoid repeating it. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site — treat it as a durable artifact.
    b. Split the approved mockup into L1 master CSS (with the shield and one token block), L2 header, L3 footer, and L4 homepage body (with JSON-LD for the business type), per `platform-know-how.md`'s migration procedure.
    c. Generate `global/04-form-custom-css.css` from `references/form-skin-template.css`, filling every token from the same tokens used in L1 — this is not optional, a plain form builder colour picker does not survive GHL's own `!important` field rules (see `platform-know-how.md`'s "Forms and chat"). Test it against the live form at `FORM_URL` per that section's testing method before delivering it.
    d. Build the two standard utility pages using the same tokens, header and footer as the homepage: `pages/404.html` and `pages/thank-you.html`. Every `new-site` build ships these alongside the homepage — see `platform-know-how.md`'s "Utility pages" for what each one needs and how it gets wired up in GHL (domain 404 assignment, form on-submit redirect). They don't get their own Plan/Mockup round trip; build them directly here from what Phases 1-2 already established.
@@ -108,6 +108,7 @@ This mode is homepage-only, and follows the 3-phase Build flow from the top-leve
   - `SETUP.md` documents the domain's 404 assignment and the form's on-submit redirect target
   - all files written into `{PREFIX}-ghl-site/` at the paths above
   - no em dashes or en dashes anywhere a visitor reads
+  - fonts: client-given fonts used unchanged (or a switch the user explicitly approved), otherwise a `font-library.md` pairing that isn't on the overused list and isn't a repeat of a recent build; pairing recorded in the design guideline
   - one H1 per page
   - title and meta not in code
   - reduced motion respected

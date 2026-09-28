@@ -21,7 +21,8 @@
      {ERROR}              validation/error text colour                         e.g. #FF8A7A
      {BODY_FONT}          the site's body font family name                     e.g. Geist
      {LABEL_FONT}         the site's mono/label font family name (repeat BODY_FONT if there isn't one) e.g. Geist Mono
-     {FONT_IMPORT_URL}    the Google Fonts @import URL covering BODY_FONT and LABEL_FONT
+     {FONT_IMPORT_URL}    the Google Fonts or Fontshare @import URL covering BODY_FONT and LABEL_FONT
+                          (same URL as the site head code; see font-library.md "Loading")
 
    This works the same way on a light-themed site: the selectors below never change, only
    the token VALUES do (light FORM_FIELD_BG, dark FORM_TEXT, and so on). Do not add or
