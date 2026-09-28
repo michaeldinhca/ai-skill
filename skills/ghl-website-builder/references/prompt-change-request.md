@@ -34,3 +34,4 @@ Update that code. Keep everything else exactly the same and keep following `plat
 2. A list of exactly what changed.
 3. Confirmation that nothing else was modified.
 4. Write the same content back to the file's actual path inside `{PREFIX}-ghl-site/`. This mode edits that file in place, it doesn't just describe the change in chat.
+5. Rebuild the site's `index.html` with `scripts/build_preview.py` so the preview reflects the fix.

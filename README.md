@@ -4,7 +4,7 @@ Reusable [Claude Code](https://claude.com/claude-code) skills: packaged workflow
 
 ## Skills
 
-- [`skills/ghl-website-builder`](skills/ghl-website-builder/SKILL.md): build, extend, or fix a client website in GoHighLevel (GHL) using a tested 4-layer architecture that survives GHL's platform quirks (boxed content width, theme CSS bleed, an editor canvas that doesn't run JS, iframe form embeds). Three modes: `new-site`, `new-page`, `fix`.
+- [`skills/ghl-website-builder`](skills/ghl-website-builder/SKILL.md): build, extend, or fix a client website in GoHighLevel (GHL) using a tested 4-layer architecture that survives GHL's platform quirks (boxed content width, theme CSS bleed, an editor canvas that doesn't run JS, iframe form embeds). Three modes: `new-site`, `new-page`, `fix`. Each client site lives in its own `{prefix}-ghl-site/` folder with a generated `index.html` at its root (one standalone preview of every page), ready for any static mockup host.
 
 ## Using a skill from this repo
 

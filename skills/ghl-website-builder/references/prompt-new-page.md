@@ -83,7 +83,7 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
 1. Read the inputs and attachments. Note the master classes and reference patterns to reuse. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
 2. **Phase 1 (Plan)**: propose this page's sections (from `SECTIONS`, or the blueprint for `PAGE_TYPE` below), and one line confirming how it fits the existing mood/tone from the design guideline. Put the primary keyword in the planned H1. Keep it short. Stop and wait for approval.
 3. **Phase 2 (Mockup)**: write the copy, then build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules: real Unsplash images, motion where it earns its place, and the site's real header/footer reconstructed inline (from the design guideline/reference page) so it can be judged as a finished page even though only the body ships to GHL. Stop and wait for comments; iterate on this one file until approved.
-4. **Phase 3 (Split)**: only once the mockup is approved, convert it into the page-body-only GHL code per the Page rules above, flag any Unsplash/stock-video URLs carried over and ask whether to keep or swap them, write it to `pages/{SLUG}.html` in the site's existing project folder, then self-check every rule below and fix before answering.
+4. **Phase 3 (Split)**: only once the mockup is approved, convert it into the page-body-only GHL code per the Page rules above, flag any Unsplash/stock-video URLs carried over and ask whether to keep or swap them, write it to `pages/{SLUG}.html` in the site's existing project folder, delete `drafts/{SLUG}.html`, rebuild the preview with `scripts/build_preview.py`, then self-check every rule below and fix before answering.
 
 ## Output format
 
@@ -108,7 +108,7 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
   - hero class matches hero style
   - contact `id="contact"`
   - no relative image paths
-  - file written to `pages/{SLUG}.html` in the existing project folder
+  - file written to `pages/{SLUG}.html` in the existing project folder, draft removed, preview rebuilt
   - reduced motion respected
   - no horizontal scroll at 375, 800, 1440
   - under 60 KB
