@@ -22,6 +22,7 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 - Header transparent over a dark hero, solid after scroll and on light pages. Logo visible.
 - Mobile menu opens, closes on link tap and Escape.
 - Menu anchors scroll on the homepage without reloading.
+- Every nav item, footer link and button lands on a real page or section. The preview's link check already passed; this confirms the published slugs in GHL match the ones in the files.
 - Hero image or video loads. Paste each media URL into a new tab to confirm.
 - Form matches the site: no white card, focused field border is the accent colour, checkbox is styled (not the native square) both unchecked and checked, submit button label is readable, privacy/terms links are readable.
 - Test form submission lands in the CRM, triggers the workflow, and redirects to the thank you page (not an inline message).

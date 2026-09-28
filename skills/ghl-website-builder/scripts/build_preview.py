@@ -8,7 +8,11 @@ Reads global/01-03, every pages/*.html and every drafts/*.html, and writes:
               page at a time, like GHL does: head code, header, the page body, footer.
               ?page=<slug> picks a page, ?page=draft:<slug> a Phase 2 mockup, ?bar=0 hides
               the preview bar. An unknown page shows pages/404.html, like the live site.
-  site.json   small manifest (name, pages, drafts, updated) for tools that list previews.
+  site.json   small manifest (name, pages, drafts, updated, linkCheck) for tools that list previews.
+
+It also checks every internal link: each /slug must be a page or draft, each #anchor a real id,
+no placeholder (#) or relative links. Broken links are printed and the exit code is 1; the
+preview is still written so the problem can be seen.
 
 index.html is always generated. Never edit it by hand; rerun this script instead. A hand-made
 index.html found in the folder is moved to archive/ rather than overwritten.
@@ -70,11 +74,24 @@ ROUTER = r"""
   var slug = isDraft ? key.slice(6) : key;
   var html;
 
+  // Inside a draft (its own document in an iframe), send site links up to this router.
+  var DRAFT_LINKS = '<script>(function(){document.addEventListener("click",function(e){' +
+    'var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a||a.target==="_blank")return;' +
+    'var h=a.getAttribute("href")||"";' +
+    'if(h.charAt(0)==="#"&&h.length>1){var t=document.getElementById(h.slice(1));if(t){e.preventDefault();t.scrollIntoView();}return;}' +
+    'if(h.charAt(0)!=="/"||h.charAt(1)==="/")return;e.preventDefault();' +
+    'parent.postMessage({ghlPreviewNav:h},"*");},true);})();<\/script>';
+
   if (isDraft && D.drafts[slug] != null) {
     document.write('<iframe id="ghl-preview-draft" title="Draft preview" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:#fff"></iframe>');
     document.addEventListener('DOMContentLoaded', function () {
       var f = document.getElementById('ghl-preview-draft');
-      if (f) f.srcdoc = D.drafts[slug];
+      if (!f) return;
+      f.addEventListener('load', function () {
+        var id = location.hash.slice(1), t = id && f.contentDocument && f.contentDocument.getElementById(id);
+        if (t) t.scrollIntoView();
+      });
+      f.srcdoc = D.drafts[slug] + DRAFT_LINKS;
     });
   } else {
     isDraft = false;
@@ -90,23 +107,42 @@ ROUTER = r"""
     location.href = '?' + p.toString() + (hash ? '#' + hash : '');
   }
 
+  // A built page wins; otherwise a draft of that page; otherwise the key (renders as 404).
+  function resolve(dest) {
+    if (D.pages[dest] != null) return dest;
+    if (D.drafts[dest] != null) return 'draft:' + dest;
+    return dest;
+  }
+
   // Site links are written for the live domain ("/about", "/#services"). Route them to pages here.
+  function follow(href) {
+    var parts = href.split('#');
+    var dest = parts[0].replace(/[?].*$/, '').replace(/^\/+|\/+$/g, '') || 'home';
+    var hash = parts[1] || '';
+    var target = resolve(dest);
+    var here = isDraft ? 'draft:' + slug : slug;
+    if (target === here) {
+      var doc = isDraft ? (document.getElementById('ghl-preview-draft') || {}).contentDocument : document;
+      var el = hash && doc && doc.getElementById(hash);
+      if (el) el.scrollIntoView();
+      else if (!hash) (isDraft ? doc.defaultView : window).scrollTo(0, 0);
+      return;
+    }
+    go(target, hash);
+  }
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
     if (!a || a.target === '_blank' || e.defaultPrevented) return;
     var href = a.getAttribute('href');
     if (!href || href.charAt(0) !== '/' || href.charAt(1) === '/') return;
-    var parts = href.split('#');
-    var dest = parts[0].replace(/[?].*$/, '').replace(/^\/+|\/+$/g, '') || 'home';
-    var hash = parts[1] || '';
     e.preventDefault();
-    if (dest === slug && !isDraft) {
-      if (hash) location.hash = hash;
-      else window.scrollTo(0, 0);
-      return;
-    }
-    go(dest, hash);
+    follow(href);
   }, true);
+  window.addEventListener('message', function (e) {
+    var f = document.getElementById('ghl-preview-draft');
+    if (!f || e.source !== f.contentWindow) return;
+    if (e.data && typeof e.data.ghlPreviewNav === 'string') follow(e.data.ghlPreviewNav);
+  });
 
   if (!showBar) return;
   document.addEventListener('DOMContentLoaded', function () {
@@ -127,6 +163,77 @@ ROUTER = r"""
   });
 })();
 """
+
+
+A_HREF = re.compile(r"""<a\b[^>]*?\bhref\s*=\s*(["'])(.*?)\1""", re.I | re.S)
+ID_ATTR = re.compile(r"""\bid\s*=\s*(["'])(.+?)\1""", re.I)
+EXTERNAL = ("http://", "https://", "//", "mailto:", "tel:", "sms:", "data:")
+NOT_LINKED_OK = {"home", "404", "thank-you"}
+
+
+def hrefs(html):
+    return [m.group(2).strip() for m in A_HREF.finditer(html)]
+
+
+def ids(html):
+    return {m.group(2) for m in ID_ATTR.finditer(html)}
+
+
+def check_links(header, footer, pages, drafts):
+    """Every internal link must land on a page or draft, and every #anchor on a real id."""
+    broken, linked = [], set()
+    chrome_ids = ids(header) | ids(footer)
+
+    def target_ids(slug):
+        if slug in pages:
+            return ids(pages[slug]) | chrome_ids
+        return ids(drafts.get(slug, ""))
+
+    def check(source, href, same_page_ids):
+        low = href.lower()
+        if low.startswith(EXTERNAL):
+            return
+        if href in ("", "#"):
+            broken.append((source, href, 'placeholder link: point it at a real page or section, or remove it'))
+        elif low.startswith("javascript:"):
+            broken.append((source, href, "javascript: link: use a real href"))
+        elif href.startswith("#"):
+            if href[1:] not in same_page_ids:
+                broken.append((source, href, f"no element with id=\"{href[1:]}\" on this page"))
+        elif href.startswith("/"):
+            path, _, anchor = href.partition("#")
+            slug = path.split("?")[0].strip("/") or "home"
+            if slug not in pages and slug not in drafts:
+                broken.append((source, href, f"no page or draft for /{slug if slug != 'home' else ''}: build it or change the link"))
+                return
+            linked.add(slug)
+            if anchor and anchor not in target_ids(slug):
+                broken.append((source, href, f"page /{slug if slug != 'home' else ''} has no element with id=\"{anchor}\""))
+        else:
+            broken.append((source, href, "relative link: write it as /slug the way the live site will"))
+
+    for slug, html in pages.items():
+        for h in hrefs(html):
+            check(f"pages/{slug}.html", h, ids(html) | chrome_ids)
+    for slug, html in drafts.items():
+        for h in hrefs(html):
+            check(f"drafts/{slug}.html", h, ids(html))
+    for name, html in (("global/02-global-header.html", header), ("global/03-global-footer.html", footer)):
+        for h in hrefs(html):
+            if h.startswith("#") and len(h) > 1:
+                missing = [s for s, p in pages.items() if h[1:] not in ids(p) | chrome_ids]
+                if missing:
+                    broken.append((name, h, f"bare #anchor in the header/footer is missing on: {', '.join(missing)}; write it as /page#id"))
+            else:
+                check(name, h, chrome_ids)
+
+    unlinked = sorted(s for s in set(pages) | set(drafts) if s not in linked and s not in NOT_LINKED_OK)
+    seen, unique = set(), []
+    for b in broken:
+        if b not in seen:
+            seen.add(b)
+            unique.append(b)
+    return unique, unlinked
 
 
 def build(folder, name=None):
@@ -182,8 +289,23 @@ def build(folder, name=None):
         "pages": [{"slug": s, "label": labels[s], "url": f"index.html?page={s}"} for s in order],
         "drafts": [{"slug": s, "label": labels[s], "url": f"index.html?page=draft:{s}"} for s in sorted(drafts)],
     }
+    broken, unlinked = check_links(header, footer, pages, drafts)
+    manifest["linkCheck"] = {
+        "broken": [{"file": f, "href": h, "problem": p} for f, h, p in broken],
+        "unlinked": unlinked,
+    }
     (folder / "site.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Wrote {index} ({len(order)} pages, {len(drafts)} drafts)")
+
+    if unlinked:
+        print(f"WARNING: nothing links to: {', '.join(unlinked)} (reachable only through the preview bar)")
+    if broken:
+        print(f"BROKEN LINKS: {len(broken)}. Fix every one before delivering:")
+        for f, h, p in broken:
+            print(f"  {f}: href=\"{h}\"  {p}")
+        return 1
+    print("Links: all internal links resolve.")
+    return 0
 
 
 if __name__ == "__main__":
@@ -191,4 +313,4 @@ if __name__ == "__main__":
     ap.add_argument("folder")
     ap.add_argument("--name")
     args = ap.parse_args()
-    build(args.folder, args.name)
+    sys.exit(build(args.folder, args.name))

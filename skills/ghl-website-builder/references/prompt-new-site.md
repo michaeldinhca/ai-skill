@@ -25,6 +25,7 @@ VISUAL_DIRECTION:
 LOGO_URL:
 HERO_MEDIA_URL:
 NAV_PAGES:
+SUB_PAGES:
 FOOTER_CONTENT:
 HOME_SECTIONS:
 FORM_URL*:
@@ -44,7 +45,8 @@ Fields marked `*` are required. If any are missing, stop and ask only for those 
 - `TONE` blank = direct, practical, plain English. `AVOID` and `ANONYMITY` blank = no extra restrictions.
 - `COLOURS` blank = propose a palette (dark, light, accent, muted, borders), but only after asking about / receiving brand assets per the visual-reference rule in the top-level SKILL.md. `FONTS`: if given, these are the fonts; you may suggest an alternative once with a reason, but keep the given fonts unless the user explicitly approves a switch. Blank = pick from `references/font-library.md` per its rules (fit to mood, tone and business; skip recently used pairings; offer two options in Phase 1).
 - `LOGO_URL` blank = text wordmark. `HERO_MEDIA_URL` blank = insert `{IMAGE_URL_hero}` and list it.
-- `NAV_PAGES`: label=URL pairs. Blank = Services, About, Contact (`/#contact`).
+- `NAV_PAGES`: label=URL pairs. A URL that is its own page (`/about`) rather than a homepage section (`/#about`) puts that page in this build: it gets planned, mocked and split alongside the homepage, so the nav never points anywhere empty. Blank = homepage sections only: Services (`/#services`), About (`/#about`), Contact (`/#contact`).
+- `SUB_PAGES`: pages to build that aren't in the nav, e.g. one page per service linked from the homepage cards. Each is part of this build, like a nav page. Blank = none beyond `NAV_PAGES`.
 - `FOOTER_CONTENT`: address, phone, email, hours, link groups. Blank = placeholders.
 - `HOME_SECTIONS` blank = hero, problems, services, proof, process, FAQ, contact.
 - `FORM_URL`: the client's GHL form URL (e.g. `https://app.crmbright.com/widget/form/jXoVcMs6h4cDt7zRexF7`). Used to read the embed host and the 20-character form ID, and to test the form skin against the live form before delivering it. See `platform-know-how.md`'s form ID and white-label host rule.
@@ -59,23 +61,23 @@ Act as a senior front-end developer, brand designer and conversion copywriter bu
 
 ## Steps
 
-This mode is homepage-only, and follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split). Each phase is its own response, gated on the user before moving to the next.
+This mode builds the homepage plus every sub page requested (the page URLs in `NAV_PAGES`, everything in `SUB_PAGES`, or pages the user asks for in conversation), per `SKILL.md`'s "Which pages are in this build". It follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split). Each phase is its own response, gated on the user before moving to the next. Sub pages use the section blueprints in `references/prompt-new-page.md` and, like every page, only facts the user has given; anything missing becomes a visible placeholder, never an invented fact.
 
 1. Read the inputs and all attachments. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
-2. **Phase 1 (Plan)**: propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given), and fonts (the client's `FONTS` if given, otherwise two options from `references/font-library.md`). Keep it short. Stop and wait for approval.
-3. **Phase 2 (Mockup)**: build the single self-contained HTML file per `SKILL.md`'s Phase 2 rules: real Unsplash images, motion/video where it earns its place, a real header and footer inline so it reads as a finished page. Stop and wait for comments; iterate on this one file until approved.
+2. **Phase 1 (Plan)**: if more than the homepage is in the build, list the sitemap first (every page, its slug, and which nav item, footer link or button leads to it). Then propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given), and fonts (the client's `FONTS` if given, otherwise two options from `references/font-library.md`). Keep it short. Stop and wait for approval.
+3. **Phase 2 (Mockup)**: build one self-contained draft per page in the build (`drafts/home.html`, `drafts/<slug>.html`) per `SKILL.md`'s Phase 2 rules: real Unsplash images, motion/video where it earns its place, the same real header and footer inline in each so every page reads as finished. Link them to each other with the site's real paths. Rebuild the preview; `build_preview.py` must report zero broken links before you show it. Stop and wait for comments; iterate on these drafts until approved.
 4. **Phase 3 (Split)**: only once the mockup is approved:
    a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules, formalizing what Phases 1-2 already settled. Record the font pairing by name and source (Google Fonts or Fontshare) so later builds can avoid repeating it. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site. Treat it as a durable artifact.
-   b. Split the approved mockup into L1 master CSS (with the shield and one token block), L2 header, L3 footer, and L4 homepage body (with JSON-LD for the business type), per `platform-know-how.md`'s migration procedure.
+   b. Split the approved mockups into L1 master CSS (with the shield and one token block), L2 header, L3 footer, the L4 homepage body (with JSON-LD for the business type), and one L4 body per sub page at `pages/<slug>.html` following the Page rules in `references/prompt-new-page.md`, per `platform-know-how.md`'s migration procedure. Shared styles go to L1 once, not repeated per page.
    c. Generate `global/04-form-custom-css.css` from `references/form-skin-template.css`, filling every token from the same tokens used in L1. This is not optional, a plain form builder colour picker does not survive GHL's own `!important` field rules (see `platform-know-how.md`'s "Forms and chat"). Test it against the live form at `FORM_URL` per that section's testing method before delivering it.
    d. Build the two standard utility pages using the same tokens, header and footer as the homepage: `pages/404.html` and `pages/thank-you.html`. Every `new-site` build ships these alongside the homepage. See `platform-know-how.md`'s "Utility pages" for what each one needs and how it gets wired up in GHL (domain 404 assignment, form on-submit redirect). They don't get their own Plan/Mockup round trip; build them directly here from what Phases 1-2 already established.
    e. Flag every Unsplash/stock-video URL carried over and ask whether to keep it or swap it for the client's Media Library upload.
-   f. Create the `{PREFIX}-ghl-site/` project folder and write every file into it at the paths in `SKILL.md`'s "Delivery" section, including `SETUP.md` for the GHL setup steps. This is the durable copy, not just what's shown in the response. Delete `drafts/home.html`, then run `scripts/build_preview.py` on the folder so the root `index.html` previews home, 404 and thank you together.
+   f. Create the `{PREFIX}-ghl-site/` project folder and write every file into it at the paths in `SKILL.md`'s "Delivery" section, including `SETUP.md` for the GHL setup steps. This is the durable copy, not just what's shown in the response. Delete every draft that has now been split, then run `scripts/build_preview.py` on the folder so the root `index.html` previews every page together. It must report zero broken links; fix and rerun until it does.
    g. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
 
 ## Output format
 
-**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the single mockup file) as described above. No GHL files yet.
+**Phase 1** and **Phase 2** each deliver just their own thing (the short plan; the linked draft mockups and rebuilt preview) as described above. No GHL files yet.
 
 **Phase 3** delivers exactly these parts, in this order, written into `{PREFIX}-ghl-site/` per `SKILL.md`'s "Delivery" section (and still shown in the response, so it can be reviewed there too):
 
@@ -83,7 +85,7 @@ This mode is homepage-only, and follows the 3-phase Build flow from the top-leve
 - **PART 2**: `global/01-site-head-code.html` (fonts + master CSS, one code block)
 - **PART 3**: `global/02-global-header.html` (one code block)
 - **PART 4**: `global/03-global-footer.html` (one code block)
-- **PART 5**: `pages/home.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters)
+- **PART 5**: `pages/home.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters), then one `pages/<slug>.html` per sub page in the build, each with its own page settings comment
 - **PART 6**: `pages/404.html` (one code block; GHL page settings comment; note it isn't linked in nav and gets assigned as the domain's 404 page, not published to a nav-reachable slug)
 - **PART 7**: `pages/thank-you.html` (one code block; GHL page settings comment; note it isn't linked in nav and is reached only via the form's on-submit redirect)
 - **PART 8**: `global/04-form-custom-css.css` (one code block, tokens filled in, no literal `{TOKEN}` left)
@@ -108,6 +110,7 @@ This mode is homepage-only, and follows the 3-phase Build flow from the top-leve
   - `SETUP.md` documents the domain's 404 assignment and the form's on-submit redirect target
   - all files written into `{PREFIX}-ghl-site/` at the paths above
   - `index.html` and `site.json` regenerated by `build_preview.py` after the last change, and every page opens in it without console errors
+  - every requested sub page built; `build_preview.py` reports zero broken links (no link to a missing page or anchor, no `href="#"`, no relative paths) and no sub page that nothing links to
   - no em dashes or en dashes anywhere a visitor reads
   - fonts: client-given fonts used unchanged (or a switch the user explicitly approved), otherwise a `font-library.md` pairing that isn't on the overused list and isn't a repeat of a recent build; pairing recorded in the design guideline
   - one H1 per page

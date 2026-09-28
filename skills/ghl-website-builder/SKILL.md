@@ -31,12 +31,17 @@ If invoked with an explicit argument (`/ghl-website new-site`, etc.), use that m
 
 ## Build flow: plan, then mockup, then split for GHL
 
-This applies to `new-site` and `new-page`: anywhere you're producing page content, not `fix`. Work in three gated phases, one page at a time. For `new-site` that means the homepage only. Don't plan or mock up the rest of the site in the same pass; other pages are separate `new-page` runs later. Never collapse phases into one response or decide on your own to keep going: each phase ends with the user, not with you.
+This applies to `new-site` and `new-page`: anywhere you're producing page content, not `fix`. Work in three gated phases. Never collapse phases into one response or decide on your own to keep going: each phase ends with the user, not with you.
+
+**Which pages are in this build.** By default a `new-site` build is the homepage (plus the 404 and thank you pages it always bundles). If the user asks for sub pages, or the nav they give lists pages rather than on-page sections, **every one of those pages is part of this build**: all of them are planned in Phase 1, mocked in Phase 2 and split in Phase 3, together. Never ship a mockup whose nav or buttons point at pages that don't exist yet. A homepage-only build links to its own sections (`/#services`) instead, and only to sections that are actually on the page.
+
+**Every expected link must work in the mockup.** Nav items, footer links, buttons, "learn more" links, cards that point at a sub page: each one lands on a real page or draft, or on a real `#section` of one. `scripts/build_preview.py` checks this on every run and exits with an error listing each broken link (missing page, missing anchor, placeholder `href="#"`, relative path). Fix every one before showing any phase to the user: build the missing page, point the link somewhere real, or remove it. It also warns about pages nothing links to; make sure each sub page is reachable from the nav, footer or a page body.
 
 **Phase 1: Plan (short, text only, no code)**
 
 Propose, in a few lines each:
-- Sections for this page (a plain list, e.g. hero / problems / services / proof / process / FAQ / contact)
+- Sitemap, when more than one page is in the build: every page with its slug, and what links to it (e.g. `/services` from nav and the homepage services cards)
+- Sections for each page (a plain list, e.g. hero / problems / services / proof / process / FAQ / contact)
 - Mood (a handful of words, e.g. "confident, industrial, no-nonsense")
 - Tone (a handful of words, e.g. "direct, plain-English, a little blunt")
 - Fonts (`new-site` only): if the client gave fonts, state them and use them. Otherwise offer two pairings from `references/font-library.md` that fit the mood, tone and business, avoiding ones used on recent builds. Follow that file's rules; client-supplied fonts are never swapped without an explicit yes.
@@ -51,7 +56,7 @@ Once the plan is approved, build ONE self-contained `.html` file for this page, 
 - **Motion**: where it strengthens the page, add real animation: CSS transitions/keyframes, scroll-reveal, hover states, a considered hero effect. Respect `prefers-reduced-motion`.
 - **Video**: where a hero or section would benefit from a background video, source a real, working, free-license video file (e.g. Pexels, Coverr, Mixkit) and embed it with `<video>`. Verify it resolves rather than fabricating a link. Don't force video in where it doesn't earn its place.
 
-Save it as `drafts/<slug>.html` inside the site's project folder (`drafts/home.html` for `new-site`) and rebuild the preview (see "Delivery" below), so the mockup is reviewable through the site's `index.html` like everything else. Then stop and ask for comments. Iterate on this same draft file, not on GHL layers, until it's approved. This is the cheap phase to get wrong; don't rush past it into Phase 3.
+Build one such file per page in the build, all sharing the same header and footer and linked to each other with the site's real paths (`/about`, `/services#pricing`). Save each as `drafts/<slug>.html` inside the site's project folder (`drafts/home.html` for the homepage) and rebuild the preview (see "Delivery" below), so the mockup is reviewable through the site's `index.html` like everything else. Then stop and ask for comments. Iterate on this same draft file, not on GHL layers, until it's approved. This is the cheap phase to get wrong; don't rush past it into Phase 3.
 
 **Phase 3: Split into GHL**
 
