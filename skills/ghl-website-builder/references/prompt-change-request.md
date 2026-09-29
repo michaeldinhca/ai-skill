@@ -26,6 +26,8 @@ Update that code. Keep everything else exactly the same and keep following `plat
 
 **Form looks unstyled, or doesn't match the site (white card, default blue button, native checkbox):** this is never a site-CSS fix. The form is an iframe, and the fix is `global/04-form-custom-css.css` (or a fresh one built from `references/form-skin-template.css` if the site predates this rule) pasted into that specific form's own Styles panel, Custom CSS field. Confirm it's actually pasted into the form itself before touching anything else; a correct skin pasted into the wrong place looks identical to no skin at all. If several forms are involved, each one needs its own paste. GHL Custom CSS is per-form.
 
+**Changing a font:** follow "Changing fonts on a live site" in `references/font-library.md`. It touches more than one file: the head code (font URL, tokens, preconnect, fallback rules) and the form skin, which has to be re-pasted into every form's Custom CSS. Deliver both files, not just the head code.
+
 **GHL's default error page shows instead of the branded 404, or form submissions don't land on the thank you page:** not a code bug. Check the GHL-side wiring first. The domain's 404/Error page setting (Settings > Domains > the domain's three-dot menu > Edit) may not point at `pages/404.html`'s published page, or the form's Options tab > On Submit may still be set to the default message instead of redirecting to `pages/thank-you.html`'s URL. See `platform-know-how.md`'s "Utility pages" section.
 
 ## Output

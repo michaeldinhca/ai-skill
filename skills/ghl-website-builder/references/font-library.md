@@ -20,7 +20,7 @@ You may suggest an alternative once, in the Phase 1 plan, when there's a concret
 
 - At most two families (display + body), plus an optional mono accent for labels or eyebrows. One family used at two weights is also fine.
 - Load only the weights actually used (typically 400, 500 and 600 or 700).
-- Always keep a fallback chain in the CSS, e.g. `'Fraunces', Georgia, serif` or `'Satoshi', system-ui, sans-serif`.
+- Always use a metric-matched fallback in the font stack, e.g. `'Fraunces', 'Fraunces Fallback', serif` (see "Loading" below).
 - Confirm each font actually renders in the Phase 2 mockup before moving on.
 - Check body text readability at 16px on mobile. Display fonts with extreme character (Syne, Unbounded, Big Shoulders Display, Anton) belong in headlines only, never body copy.
 
@@ -32,9 +32,34 @@ These are fine fonts, but they're the default of every template and page builder
 
 ## Loading
 
-- **Google Fonts**: `https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Instrument+Sans:wght@400;500;600&display=swap` (spaces become `+`, one `family=` per font).
-- **Fontshare (FS)**: `https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=clash-display@600&display=swap` (lowercase, hyphenated slugs).
-- Load fonts once, in `global/01-site-head-code.html`. The form skin needs its own `@import` because the form is an iframe; if that import fails inside the form, the fallback chain takes over and the form still works.
+Fonts load once, in `global/01-site-head-code.html`, in this order:
+
+1. **Preconnect** to the font servers first, so the connection is open before the CSS is even read:
+
+   ```html
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   ```
+
+   For Fontshare use `https://api.fontshare.com` and `https://cdn.fontshare.com` (the second with `crossorigin`). Only preconnect to the servers the site actually uses.
+2. **The font CSS**, with only the weights the site uses and `display=swap`:
+   - **Google Fonts**: `https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Instrument+Sans:wght@400;500&display=swap` (spaces become `+`, one `family=` per font).
+   - **Fontshare (FS)**: `https://api.fontshare.com/v2/css?f[]=satoshi@400,500&f[]=clash-display@600&display=swap` (lowercase, hyphenated slugs).
+   Every extra weight is another file to download on a visitor's first visit, so check the CSS actually uses each weight you load.
+3. **Metric-matched fallbacks**: copy the rule for each chosen font from `references/font-fallbacks.css` into the head code's `<style>`, and use the stack from its comment, e.g. `font-family: 'Fraunces', 'Fraunces Fallback', serif;`. While the web font is still loading, the system font then takes up the same space, so the page doesn't jump when the real font swaps in. For a font that isn't in that file (a client's own font, or a new library addition), generate the rule with `python scripts/font_fallback.py "Name:weight:sans|serif|mono"` (needs `pip install fonttools brotli`; it also takes a Fontshare `fs:slug` or a local font file). If it can't be run, fall back to a plain stack and say so.
+
+Don't self-host font files in GHL's Media Library and don't `preload` specific font file URLs: the font servers already let browsers cache the files (Google for a year, Fontshare for a week), GHL's media host isn't confirmed to send the cross-origin headers fonts need, and Google's file URLs change when a font is updated.
+
+The form skin needs its own `@import` of the same font CSS because the form is an iframe; if that import fails inside the form, the fallback chain takes over and the form still works.
+
+## Changing fonts on a live site
+
+Browsers cache fonts by exact URL, so switching to a different font or weight downloads the new one automatically; nobody needs to clear their cache. What does need doing, every time:
+
+- Update the font CSS URL, the font tokens, the preconnect lines if the font server changed, and the fallback rules in `global/01-site-head-code.html`, then re-paste it in GHL and republish.
+- Update `{FONT_IMPORT_URL}`, `{BODY_FONT}` and `{LABEL_FONT}` in `global/04-form-custom-css.css` and **re-paste it into every form's Custom CSS**. This is the step that gets missed; the form otherwise keeps the old font.
+- Update the pairing recorded in the design guideline, so the no-repeat check stays accurate.
+- Rebuild the preview. If you don't see the new font on your own machine right away, it's GHL's publish delay or your browser holding the page; a hard refresh (Ctrl+F5) confirms it.
 
 ## Pairings
 
