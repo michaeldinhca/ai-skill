@@ -29,6 +29,9 @@ SUB_PAGES:
 FOOTER_CONTENT:
 HOME_SECTIONS:
 FORM_URL*:
+ACCESSIBILITY_EMAIL*:
+ACCESSIBILITY_PHONE:
+MAILING_ADDRESS:
 FORM_EMBED:
 MOTION:
 EXISTING_MOCKUP:
@@ -49,6 +52,7 @@ Fields marked `*` are required. If any are missing, stop and ask only for those 
 - `SUB_PAGES`: pages to build that aren't in the nav, e.g. one page per service linked from the homepage cards. Each is part of this build, like a nav page. Blank = none beyond `NAV_PAGES`.
 - `FOOTER_CONTENT`: address, phone, email, hours, link groups. Blank = placeholders.
 - `HOME_SECTIONS` blank = hero, problems, services, proof, process, FAQ, contact.
+- `ACCESSIBILITY_EMAIL`, `ACCESSIBILITY_PHONE`, `MAILING_ADDRESS`: the real contact details for accessibility feedback, used in the toolbar config (`feedbackEmail`) and the `/accessibility` statement page. AODA requires a working feedback channel, so the email is required. Phone and address may come from `FOOTER_CONTENT` if it has them; otherwise ask. Never invent any of them.
 - `FORM_URL`: the client's GHL form URL (e.g. `https://app.crmbright.com/widget/form/jXoVcMs6h4cDt7zRexF7`). Used to read the embed host and the 20-character form ID, and to test the form skin against the live form before delivering it. See `platform-know-how.md`'s form ID and white-label host rule.
 - `FORM_EMBED` blank = build the standard iframe + `form_embed.js` embed yourself from `FORM_URL`'s host and form ID. Provide this only if the client's account produces a non-standard embed snippet that should be preserved as-is.
 - `MOTION` blank = STANDARD (reveal on scroll, hover states). Options: MINIMAL, STANDARD, RICH (with one signature animation).
@@ -70,7 +74,7 @@ This mode builds the homepage plus every sub page requested (the page URLs in `N
    a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules, formalizing what Phases 1-2 already settled. Record the font pairing by name and source (Google Fonts or Fontshare) so later builds can avoid repeating it. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site. Treat it as a durable artifact.
    b. Split the approved mockups into L1 master CSS (with the shield and one token block), L2 header, L3 footer, the L4 homepage body (with JSON-LD for the business type), and one L4 body per sub page at `pages/<slug>.html` following the Page rules in `references/prompt-new-page.md`, per `platform-know-how.md`'s migration procedure. Shared styles go to L1 once, not repeated per page.
    c. Generate `global/04-form-custom-css.css` from `references/form-skin-template.css`, filling every token from the same tokens used in L1. This is not optional, a plain form builder colour picker does not survive GHL's own `!important` field rules (see `platform-know-how.md`'s "Forms and chat"). Test it against the live form at `FORM_URL` per that section's testing method before delivering it.
-   d. Build the two standard utility pages using the same tokens, header and footer as the homepage: `pages/404.html` and `pages/thank-you.html`. Every `new-site` build ships these alongside the homepage. See `platform-know-how.md`'s "Utility pages" for what each one needs and how it gets wired up in GHL (domain 404 assignment, form on-submit redirect). They don't get their own Plan/Mockup round trip; build them directly here from what Phases 1-2 already established.
+   d. Build the three standard utility pages using the same tokens, header and footer as the homepage: `pages/404.html`, `pages/thank-you.html` and `pages/accessibility.html`. Every `new-site` build ships these alongside the homepage. See `platform-know-how.md`'s "Utility pages" for what each one needs and how it gets wired up in GHL (domain 404 assignment, form on-submit redirect), and `references/accessibility.md` section 4 for the statement page. They don't get their own Plan/Mockup round trip; build them directly here from what Phases 1-2 already established.
    e. Flag every Unsplash/stock-video URL carried over and ask whether to keep it or swap it for the client's Media Library upload.
    f. Create the `{PREFIX}-ghl-site/` project folder and write every file into it at the paths in `SKILL.md`'s "Delivery" section, including `SETUP.md` for the GHL setup steps. This is the durable copy, not just what's shown in the response. Delete every draft that has now been split, then run `scripts/build_preview.py` on the folder so the root `index.html` previews every page together. It must report zero broken links; fix and rerun until it does.
    g. Check the build against the GHL-like harness described in `platform-know-how.md`'s migration section and every rule in that file. Fix before answering.
@@ -88,10 +92,11 @@ This mode builds the homepage plus every sub page requested (the page URLs in `N
 - **PART 5**: `pages/home.html` (one code block; GHL page settings in a comment at the top: page name, slug `/`, SEO title max 60 characters, meta description 150 to 160 characters), then one `pages/<slug>.html` per sub page in the build, each with its own page settings comment
 - **PART 6**: `pages/404.html` (one code block; GHL page settings comment; note it isn't linked in nav and gets assigned as the domain's 404 page, not published to a nav-reachable slug)
 - **PART 7**: `pages/thank-you.html` (one code block; GHL page settings comment; note it isn't linked in nav and is reached only via the form's on-submit redirect)
-- **PART 8**: `global/04-form-custom-css.css` (one code block, tokens filled in, no literal `{TOKEN}` left)
-- **PART 9**: `SETUP.md` (GHL setup steps: where each file goes, the domain's 404 page assignment, the form's on-submit redirect to the thank you page's URL, form builder style values matching the tokens, chat widget colours)
-- **PART 10**: Placeholder and media list (every token or `[PLACEHOLDER]` left and what is needed, plus the Unsplash/video URL keep-or-swap decision from step 4e)
-- **PART 11**: Self-check, PASS or FIXED per line:
+- **PART 8**: `pages/accessibility.html` (one code block; GHL page settings comment, slug `/accessibility`; every `{{PLACEHOLDER}}` filled with real details from the user)
+- **PART 9**: `global/04-form-custom-css.css` (one code block, tokens filled in, no literal `{TOKEN}` left)
+- **PART 10**: `SETUP.md` (GHL setup steps: where each file goes, the AODA-ADA core in the head code (hosted URL, or inline and checked that GHL saved it whole), the domain's 404 page assignment, the form's on-submit redirect to the thank you page's URL, form builder settings: labels visible, required marked in text, style values matching the tokens, chat widget colours)
+- **PART 11**: Placeholder and media list (every token or `[PLACEHOLDER]` left and what is needed, plus the Unsplash/video URL keep-or-swap decision from step 4e)
+- **PART 12**: Self-check, PASS or FIXED per line:
   - shield present
   - all selectors scoped under `.{PREFIX}`
   - px not rem
@@ -106,7 +111,11 @@ This mode builds the homepage plus every sub page requested (the page URLs in `N
   - no relative image paths
   - GHL form iframe + embed script, host matches `FORM_URL`
   - form skin generated from `form-skin-template.css`, no literal `{TOKEN}` left, tested against the live form (field, hover, focus, checkbox, submit label)
-  - 404 and thank you pages built with the same tokens, header and footer as home, and not linked in nav
+  - 404, thank you and accessibility pages built with the same tokens, header and footer as home, and not linked in nav; accessibility statement linked in the footer with real contact details
+  - AODA-ADA core loaded site-wide in the head code without `defer`, config before it, `statementUrl` and `feedbackEmail` set, launcher left with back-to-top stacked above it, styled at the lowest level that works with 4.5:1 / 3:1 contrast and visible focus
+  - `CHECKLIST.md` passed: landmarks (`<header>`, `<nav aria-label>`, one `<main id="main">`, `<footer>`), ordered headings, alt text, visible focus, keyboard-only use including the mobile menu, no zoom blocking, pause controls for motion over 5 seconds, JS motion honours `aoda-motion-off` and `aoda:change`, form iframe has a `title`
+  - `?aoda-audit` shows zero errors on every page, a full keyboard tab-through done, and anything left over reported
+  - no "AODA compliant" or "ADA compliant" claims in any copy
   - `SETUP.md` documents the domain's 404 assignment and the form's on-submit redirect target
   - all files written into `{PREFIX}-ghl-site/` at the paths above
   - `index.html` and `site.json` regenerated by `build_preview.py` after the last change, and every page opens in it without console errors

@@ -74,13 +74,15 @@ setTimeout(fullWidthFix, 2000);
 - If the page's first section has class `{PREFIX}-hero` (a dark full-bleed hero), the header is transparent at the top and turns solid after 40px of scroll, and the spacer is hidden. Every other page gets a solid header and the spacer. Detect with CSS `html:has(.{PREFIX} .{PREFIX}-hero) .{PREFIX}-header-spacer{display:none}` plus a JS fallback that toggles a class on `<html>`.
 - Hero sections need top padding of at least 140px desktop and 110px mobile so content clears the fixed header.
 - Menu links use full paths (`/#services`, `/about`). A small script rewrites `/#id` to `#id` when that id exists on the current page, so same-page links scroll without reloading.
-- Mobile menu: button with `aria-expanded` and `aria-controls`, closes on link click and Escape.
+- Mobile menu: button with `aria-expanded` and `aria-controls`, closes on link click and Escape, and returns focus to the button.
+- Markup is a real `<header>` with `<nav aria-label="Main">`, and the header script keeps `document.documentElement.style.scrollPaddingTop` equal to the bar's height so focused elements never hide under it (see `references/accessibility.md`).
 - Remember: an element with a CSS transform breaks `position:fixed` inside it. The full-width script clears transforms on GHL ancestors.
 
 ## Footer (global section)
 
 - Contains: footer markup, back-to-top button, optional mobile sticky CTA bar, and the site-wide "reveal on scroll" observer for elements with class `reveal`.
-- Back-to-top goes bottom-LEFT. The GHL chat bubble occupies bottom-right.
+- Back-to-top goes bottom-LEFT, stacked **above** the AODA-ADA accessibility launcher (bottom offset about 84px). The GHL chat bubble occupies bottom-right; the accessibility launcher sits bottom-left at the corner.
+- Footer markup is a real `<footer>` and links the accessibility statement (`/accessibility`) on every page.
 - Only add the "pending" (hidden) state to reveal elements below the fold, so nothing flashes or stays hidden if JS fails.
 
 ## JavaScript
@@ -95,6 +97,7 @@ setTimeout(fullWidthFix, 2000);
 - GHL form embeds are iframes. Site CSS cannot style anything inside them, so the fix lives in the form itself, not the page. **Every build ships a form skin**: a Custom CSS file, generated from `references/form-skin-template.css` using the site's design tokens, pasted into the form builder's Styles panel, Custom CSS field (exact menu wording may vary by GHL version. Look for "Custom CSS" inside that form's own style settings). Without it, the native form renders as a plain white card with a default blue button no matter how dark or branded the rest of the site is.
 - GHL's own form CSS is heavy and marks its own rules `!important`. A plain selector like `.form-control:focus { border-color: X !important }` loses to GHL's own rule (observed: `#_builder-form .form-builder--item input[type="text"][class="form-control"]:focus`, specificity 1,4,1). Beat it by adding `html body` in front and an attribute selector after the class, e.g. `html body #_builder-form .form-builder--item input.form-control[class]:focus` (1,4,3). The template applies this pattern to fields, hover, focus, the checkbox and the submit button's inline-styled label.
 - Custom CSS is set per form, not site-wide. If a site or page embeds more than one form, paste the same skin file into each form's own Custom CSS panel; it's form-agnostic (built from generic DOM hooks, not one form's field names) so the same file works unchanged across forms.
+- Give the form `<iframe>` a `title` (e.g. `title="Contact form"`), and in the GHL form builder keep field labels visible (a placeholder is not a label) with required fields marked in text. The accessibility toolbar can't reach inside the iframe, so the form has to be accessible on its own.
 - Keep GHL's `form_embed.js` script next to the iframe; it resizes the iframe automatically. Give the iframe a sensible starting height. **The iframe stays invisible (`opacity:0`, pulled offscreen) until a real form loads**. An unconfigured or placeholder embed looks empty, or collapses to about 50px tall. That is expected, not a bug; judge the layout only after the real form ID is in.
 - The form ID is the 20-character string after `/widget/form/` in the form's URL (e.g. `jXoVcMs6h4cDt7zRexF7`). White-label agencies serve forms from their own domain, not always `msgsndr.com`/`leadconnectorhq.com`. Build both the iframe `src` and the `form_embed.js` `src` from the host in the form URL the client gives you. Ask for that URL rather than guessing the host.
 - Do not build custom HTML forms unless an endpoint (webhook) is supplied; GHL-native forms are what sync to the CRM and workflows.
@@ -112,9 +115,11 @@ setTimeout(fullWidthFix, 2000);
 - Never use relative paths (`./hero.jpg`). GHL cannot serve them. Use GHL Media Library URLs. If a URL is not provided, insert the token `{IMAGE_URL_description}` in the `src` and list it.
 - No base64 images. Keep each code element under about 60 KB. If a block is larger, deliver it so it can be split into two elements: (A) style + markup, (B) script.
 
-## Utility pages: 404 and thank you
+## Utility pages: 404, thank you and accessibility statement
 
-Every site ships with these two pages alongside the homepage, built as ordinary L4 page bodies (same header, footer, tokens and full-width script as any other page, not a stripped-down unbranded page). Neither goes in the main nav.
+Every site ships with these pages alongside the homepage, built as ordinary L4 page bodies (same header, footer, tokens and full-width script as any other page, not a stripped-down unbranded page). None of them goes in the main nav.
+
+- **Accessibility statement** (`/accessibility`): built from the AODA-ADA template and linked in every footer. See `references/accessibility.md` section 4; its contact details must come from the user.
 
 - **404 page**: short and on-brand: a line acknowledging the page wasn't found and a way back (link or button to the homepage, optionally to a couple of key pages). Assign it under Settings > Domains: find the domain, open its three-dot menu > Edit, and set it as that domain's 404/Error page from the dropdown of eligible pages. Exact wording can vary by GHL version. Look for "404" or "Error Page" in the domain's own settings, not the site or page settings.
 - **Thank you page**: confirms the form submission landed and says what happens next, using only facts already established for the site (don't invent a response-time promise that wasn't given). Not linked from navigation; visitors only reach it after submitting. Wire it up in the form builder, not the site: open the form's Styles and Options (gear icon) > Options tab > On Submit, change it from the default message to redirect, and paste this page's full published URL (with `https://`). A dedicated page beats GHL's inline "thank you" message whenever the client wants ad conversion tracking on that URL.

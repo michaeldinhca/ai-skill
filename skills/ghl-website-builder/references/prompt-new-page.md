@@ -75,8 +75,9 @@ Act as a senior front-end developer and conversion copywriter building ONE page 
 5. The contact section has `id="contact"`.
 6. Use only facts from `SOURCE_CONTENT` and `VERIFIED_PROOF`. Where something is missing, insert `<span class="placeholder">[PLACEHOLDER: what is needed]</span>`. Never fill the gap with an invented fact.
 7. Follow the client's copy rules from the design guideline (tone, banned words, anonymity, punctuation) plus the standing rule in the top-level `SKILL.md`: no em dashes anywhere a visitor reads.
-8. Every link on this page goes somewhere real: an existing page, a page built in this same run, or a real `#section`. If the page needs to link to something that doesn't exist yet, say so in Phase 1 and either add that page to this run (same phases) or link somewhere that exists.
-9. The page must be reachable. If it belongs in the nav or footer, update `global/02-global-header.html` or `global/03-global-footer.html` to link it, say that a global file changed, and deliver that file too, since it has to be re-pasted in GHL. Otherwise add a link to it from a relevant existing page and deliver that page as well.
+8. Accessibility per `references/accessibility.md` and the AODA-ADA `CHECKLIST.md`: one `<main id="main">`, one H1, headings in order, alt text, visible focus, keyboard-operable controls, 4.5:1 contrast, pause controls for motion over 5 seconds, JS motion honouring `aoda-motion-off` / `aoda:change`, a `title` on any form iframe. No "AODA/ADA compliant" claims.
+9. Every link on this page goes somewhere real: an existing page, a page built in this same run, or a real `#section`. If the page needs to link to something that doesn't exist yet, say so in Phase 1 and either add that page to this run (same phases) or link somewhere that exists.
+10. The page must be reachable. If it belongs in the nav or footer, update `global/02-global-header.html` or `global/03-global-footer.html` to link it, say that a global file changed, and deliver that file too, since it has to be re-pasted in GHL. Otherwise add a link to it from a relevant existing page and deliver that page as well.
 
 ## Steps
 
@@ -111,6 +112,7 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
   - contact `id="contact"`
   - no relative image paths
   - file written to `pages/{SLUG}.html` in the existing project folder, draft removed, preview rebuilt
+  - `index.html?page={SLUG}&aoda-audit` shows zero errors, keyboard tab-through done, anything left over reported
   - `build_preview.py` reports zero broken links, and this page isn't in its "nothing links to" warning (linked from nav, footer or another page; any changed global file or page delivered too)
   - reduced motion respected
   - no horizontal scroll at 375, 800, 1440

@@ -6,7 +6,7 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 
 ## Install order for a new site
 
-1. Website Settings > Tracking Code > Header: paste `global/01-site-head-code.html`.
+1. Website Settings > Tracking Code > Header: paste `global/01-site-head-code.html` (fonts, master CSS, and the AODA-ADA config + core). If the core is pasted inline rather than from a hosted URL, reopen the field after saving and confirm the end of the file is still there.
 2. Header global section: one Custom HTML/JS element with `global/02-global-header.html`. Delete old header elements.
 3. Footer global section: same with `global/03-global-footer.html`.
 4. Homepage: one section with one Custom HTML/JS element containing `pages/home.html`. Set the homepage path to `/` and redirect `/home`.
@@ -27,6 +27,7 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 - Form matches the site: no white card, focused field border is the accent colour, checkbox is styled (not the native square) both unchecked and checked, submit button label is readable, privacy/terms links are readable.
 - Test form submission lands in the CRM, triggers the workflow, and redirects to the thank you page (not an inline message).
 - Visit a URL that doesn't exist on the domain: the branded 404 page loads, not GHL's default error page.
-- Chat opens and does not cover the back-to-top button.
+- Chat opens and does not cover the back-to-top button; the accessibility launcher (bottom-left) doesn't overlap back-to-top or a mobile sticky bar.
+- Accessibility: every page with `?aoda-audit` shows zero errors; keyboard-only pass through every page and the form (Tab, Shift+Tab, Enter, Escape); toolbar opens, its settings apply, "Stop animations" pauses any JS motion; footer links to `/accessibility`. Report anything left over rather than calling the site compliant.
 - Check 375px, 800px and 1440px widths. No sideways scroll.
 - Scroll through slowly once: scroll-triggered animations only play when their section is on screen, so full-page screenshots can look "unfinished".

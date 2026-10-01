@@ -16,6 +16,9 @@ Symptom, cause and fix, from real builds. Check this before diagnosing a "looks 
 | Form panel is empty or collapsed to about 50px in Preview | Placeholder or wrong form ID; `form_embed.js` hides the iframe until a real form loads | Use the real form URL and its 20-character form ID, not a placeholder |
 | Form fails to load, or loads a different form, on a white-label account | Embed built against the wrong host | Build the iframe `src` and `form_embed.js` `src` from the host in the client's own form URL, not `msgsndr.com`/`leadconnectorhq.com` by default |
 | Back-to-top hidden behind chat bubble | Both bottom-right | Back-to-top bottom-left |
+| Back-to-top overlaps the accessibility launcher | Both bottom-left | Stack back-to-top above the launcher (bottom about 84px) |
+| Accessibility toolbar missing | Builder canvas doesn't run scripts, or the inline core was cut off when saving the head code | Check in Preview; reopen the head code field and confirm the end of the core is there, or use a hosted URL |
+| JS hero or slider keeps moving after "Stop animations" | Site JS doesn't listen to the toolbar | Pause when `<html>` has `aoda-motion-off` and on the `aoda:change` event (core README section 4) |
 | Code "does nothing" in the editor | GHL builder canvas does not run custom JS | Check in Preview or live |
 | Menu links reload the homepage | Homepage served at /home while links point to "/#id" | Homepage at "/", redirect /home, link rewrite script |
 | Fixed header scrolls away or misplaces | A GHL ancestor has a CSS transform | Full-width script clears transforms on ancestors |
