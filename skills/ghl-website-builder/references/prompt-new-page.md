@@ -76,8 +76,9 @@ Act as a senior front-end developer and conversion copywriter building ONE page 
 6. Use only facts from `SOURCE_CONTENT` and `VERIFIED_PROOF`. Where something is missing, insert `<span class="placeholder">[PLACEHOLDER: what is needed]</span>`. Never fill the gap with an invented fact.
 7. Follow the client's copy rules from the design guideline (tone, banned words, anonymity, punctuation) plus the standing rule in the top-level `SKILL.md`: no em dashes anywhere a visitor reads.
 8. Accessibility per `references/accessibility.md` and the AODA-ADA `CHECKLIST.md`: one `<main id="main">`, one H1, headings in order, alt text, visible focus, keyboard-operable controls, 4.5:1 contrast, pause controls for motion over 5 seconds, JS motion honouring `aoda-motion-off` / `aoda:change`, a `title` on any form iframe. No "AODA/ADA compliant" claims.
-9. Every link on this page goes somewhere real: an existing page, a page built in this same run, or a real `#section`. If the page needs to link to something that doesn't exist yet, say so in Phase 1 and either add that page to this run (same phases) or link somewhere that exists.
-10. The page must be reachable. If it belongs in the nav or footer, update `global/02-global-header.html` or `global/03-global-footer.html` to link it, say that a global file changed, and deliver that file too, since it has to be re-pasted in GHL. Otherwise add a link to it from a relevant existing page and deliver that page as well.
+9. Mockup legal safety per `references/mockup-legal.md`: while the site is still a mockup, this page keeps the site's invented name, the fixed mock address, phone and email, and stock media only. `SOURCE_CONTENT` taken from the real business's site informs what the page covers but is not reused as wording, and its projects, photos, testimonials and names stay out unless the user has confirmed their use.
+10. Every link on this page goes somewhere real: an existing page, a page built in this same run, or a real `#section`. If the page needs to link to something that doesn't exist yet, say so in Phase 1 and either add that page to this run (same phases) or link somewhere that exists.
+11. The page must be reachable. If it belongs in the nav or footer, update `global/02-global-header.html` or `global/03-global-footer.html` to link it, say that a global file changed, and deliver that file too, since it has to be re-pasted in GHL. Otherwise add a link to it from a relevant existing page and deliver that page as well.
 
 ## Steps
 
@@ -103,6 +104,7 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
   - only provided facts
   - client copy rules followed
   - no em dashes or en dashes
+  - mockup legal: invented name, mock contact details, stock media only, nothing reused from the real business without confirmed approval
   - no header, footer or fonts in code
   - selectors scoped
   - px not rem

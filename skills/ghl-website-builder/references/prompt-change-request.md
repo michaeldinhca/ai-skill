@@ -26,6 +26,8 @@ Update that code. Keep everything else exactly the same and keep following `plat
 
 **Form looks unstyled, or doesn't match the site (white card, default blue button, native checkbox):** this is never a site-CSS fix. The form is an iframe, and the fix is `global/04-form-custom-css.css` (or a fresh one built from `references/form-skin-template.css` if the site predates this rule) pasted into that specific form's own Styles panel, Custom CSS field. Confirm it's actually pasted into the form itself before touching anything else; a correct skin pasted into the wrong place looks identical to no skin at all. If several forms are involved, each one needs its own paste. GHL Custom CSS is per-form.
 
+**A change asks for the real logo, name, contact details, photos or projects on a mockup:** don't just apply it. Follow `references/mockup-legal.md`: say what the legal risk is, ask the user to confirm, and make the change only after an explicit yes, recording it in the design guideline and `SETUP.md`. Going the other way (a confirmed client going live) means replacing every mock value, not just the one mentioned.
+
 **Accessibility toolbar looks or behaves wrong:** restyle it only from the site (tokens or `#aoda-ada` CSS in the head code, per `references/accessibility.md` section 3). Never edit files in `AODA-ADA/`. If the core itself is at fault, stop and report it to the user instead. After any fix, re-run `?aoda-audit` on the affected pages.
 
 **Changing a font:** follow "Changing fonts on a live site" in `references/font-library.md`. It touches more than one file: the head code (font URL, tokens, preconnect, fallback rules) and the form skin, which has to be re-pasted into every form's Custom CSS. Deliver both files, not just the head code.

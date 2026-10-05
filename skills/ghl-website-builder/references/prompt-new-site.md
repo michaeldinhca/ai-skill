@@ -29,30 +29,33 @@ SUB_PAGES:
 FOOTER_CONTENT:
 HOME_SECTIONS:
 FORM_URL*:
-ACCESSIBILITY_EMAIL*:
+ACCESSIBILITY_EMAIL:
 ACCESSIBILITY_PHONE:
 MAILING_ADDRESS:
 FORM_EMBED:
 MOTION:
 EXISTING_MOCKUP:
+REAL_IDENTITY_CONFIRMED:
 ```
 
 Fields marked `*` are required. If any are missing, stop and ask only for those before generating anything. Everything else can fall back to its default below.
 
 **Field meanings and defaults**
 
+- `REAL_IDENTITY_CONFIRMED` blank = **this is a mockup**, which is the normal case: follow `references/mockup-legal.md` (invented name and wordmark, the fixed mock address, phone and email, free stock media only, nothing taken from the business's own site). Set it only after the user has explicitly confirmed, item by item, that the business's real name, logo, contact details, photos or projects may be used; list exactly what was confirmed. A real name or logo appearing in the other fields is not a confirmation.
+- `CLIENT_NAME`: the real business, so you know who the mockup is for. In a mockup it is never shown; propose an invented name in Phase 1 and use that everywhere a visitor sees a name.
 - `PREFIX`: short lowercase class prefix for this client (e.g. `acme`). Used as `{PREFIX}` everywhere, including inside code.
 - `BUSINESS_SUMMARY`: what they do, for whom, where.
 - `MAIN_CTA`: the primary action, e.g. "Book a free estimate".
 - `PROOF`: approved testimonials, metrics, certifications. Blank = use no proof claims. Never invent one.
 - `TONE` blank = direct, practical, plain English. `AVOID` and `ANONYMITY` blank = no extra restrictions.
 - `COLOURS` blank = propose a palette (dark, light, accent, muted, borders), but only after asking about / receiving brand assets per the visual-reference rule in the top-level SKILL.md. `FONTS`: if given, these are the fonts; you may suggest an alternative once with a reason, but keep the given fonts unless the user explicitly approves a switch. Blank = pick from `references/font-library.md` per its rules (fit to mood, tone and business; skip recently used pairings; offer two options in Phase 1).
-- `LOGO_URL` blank = text wordmark. `HERO_MEDIA_URL` blank = insert `{IMAGE_URL_hero}` and list it.
+- `LOGO_URL` blank = text wordmark. In a mockup a given logo is reference only (colours, feel); the mockup still uses a wordmark of the invented name unless real use is confirmed. `HERO_MEDIA_URL` blank = insert `{IMAGE_URL_hero}` and list it.
 - `NAV_PAGES`: label=URL pairs. A URL that is its own page (`/about`) rather than a homepage section (`/#about`) puts that page in this build: it gets planned, mocked and split alongside the homepage, so the nav never points anywhere empty. Blank = homepage sections only: Services (`/#services`), About (`/#about`), Contact (`/#contact`).
 - `SUB_PAGES`: pages to build that aren't in the nav, e.g. one page per service linked from the homepage cards. Each is part of this build, like a nav page. Blank = none beyond `NAV_PAGES`.
-- `FOOTER_CONTENT`: address, phone, email, hours, link groups. Blank = placeholders.
+- `FOOTER_CONTENT`: address, phone, email, hours, link groups. Blank = placeholders. In a mockup the address, phone and email are always the fixed mock values, whatever is given here.
 - `HOME_SECTIONS` blank = hero, problems, services, proof, process, FAQ, contact.
-- `ACCESSIBILITY_EMAIL`, `ACCESSIBILITY_PHONE`, `MAILING_ADDRESS`: the real contact details for accessibility feedback, used in the toolbar config (`feedbackEmail`) and the `/accessibility` statement page. AODA requires a working feedback channel, so the email is required. Phone and address may come from `FOOTER_CONTENT` if it has them; otherwise ask. Never invent any of them.
+- `ACCESSIBILITY_EMAIL`, `ACCESSIBILITY_PHONE`, `MAILING_ADDRESS`: in a mockup these are the fixed mock email, phone and address, with nothing to ask. For a confirmed real client they are required: the real contact details for accessibility feedback, used in the toolbar config (`feedbackEmail`) and the `/accessibility` statement page. AODA requires a working feedback channel, so the email is required. Phone and address may come from `FOOTER_CONTENT` if it has them; otherwise ask. Never invent any of them.
 - `FORM_URL`: the client's GHL form URL (e.g. `https://app.crmbright.com/widget/form/jXoVcMs6h4cDt7zRexF7`). Used to read the embed host and the 20-character form ID, and to test the form skin against the live form before delivering it. See `platform-know-how.md`'s form ID and white-label host rule.
 - `FORM_EMBED` blank = build the standard iframe + `form_embed.js` embed yourself from `FORM_URL`'s host and form ID. Provide this only if the client's account produces a non-standard embed snippet that should be preserved as-is.
 - `MOTION` blank = STANDARD (reveal on scroll, hover states). Options: MINIMAL, STANDARD, RICH (with one signature animation).
@@ -68,7 +71,7 @@ Act as a senior front-end developer, brand designer and conversion copywriter bu
 This mode builds the homepage plus every sub page requested (the page URLs in `NAV_PAGES`, everything in `SUB_PAGES`, or pages the user asks for in conversation), per `SKILL.md`'s "Which pages are in this build". It follows the 3-phase Build flow from the top-level `SKILL.md` (Plan → Mockup → Split). Each phase is its own response, gated on the user before moving to the next. Sub pages use the section blueprints in `references/prompt-new-page.md` and, like every page, only facts the user has given; anything missing becomes a visible placeholder, never an invented fact.
 
 1. Read the inputs and all attachments. If any required (`*`) field is empty, stop and ask only for those before Phase 1.
-2. **Phase 1 (Plan)**: if more than the homepage is in the build, list the sitemap first (every page, its slug, and which nav item, footer link or button leads to it). Then propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given), and fonts (the client's `FONTS` if given, otherwise two options from `references/font-library.md`). Keep it short. Stop and wait for approval.
+2. **Phase 1 (Plan)**: for a mockup, start with the invented business name (two options) and say in one line that the mockup uses mock contact details and stock media only. If the request asked for the real name, logo, contact details, photos or projects, raise the legal concern here and wait for an explicit yes before using any of them (`references/mockup-legal.md`). Then, if more than the homepage is in the build, list the sitemap first (every page, its slug, and which nav item, footer link or button leads to it). Then propose homepage sections (from `HOME_SECTIONS`, or the default blueprint: hero, problems, services, proof, process, FAQ, contact), mood, and tone (from `TONE`/`VISUAL_DIRECTION`/brand assets, or a proposal if none given), and fonts (the client's `FONTS` if given, otherwise two options from `references/font-library.md`). Keep it short. Stop and wait for approval.
 3. **Phase 2 (Mockup)**: build one self-contained draft per page in the build (`drafts/home.html`, `drafts/<slug>.html`) per `SKILL.md`'s Phase 2 rules: real Unsplash images, motion/video where it earns its place, the same real header and footer inline in each so every page reads as finished. Link them to each other with the site's real paths. Rebuild the preview; `build_preview.py` must report zero broken links before you show it. Stop and wait for comments; iterate on these drafts until approved.
 4. **Phase 3 (Split)**: only once the mockup is approved:
    a. Write the design guideline: tokens, type scale, spacing, components (buttons, cards, eyebrow, sections), imagery, motion and copy rules, formalizing what Phases 1-2 already settled. Record the font pairing by name and source (Google Fonts or Fontshare) so later builds can avoid repeating it. Copy rules must carry forward `SKILL.md`'s standing no-em-dash rule so every future page written from this guideline inherits it. It becomes the reference for every future page on this site. Treat it as a durable artifact.
@@ -116,6 +119,8 @@ This mode builds the homepage plus every sub page requested (the page URLs in `N
   - `CHECKLIST.md` passed: landmarks (`<header>`, `<nav aria-label>`, one `<main id="main">`, `<footer>`), ordered headings, alt text, visible focus, keyboard-only use including the mobile menu, no zoom blocking, pause controls for motion over 5 seconds, JS motion honours `aoda-motion-off` and `aoda:change`, form iframe has a `title`
   - `?aoda-audit` shows zero errors on every page, a full keyboard tab-through done, and anything left over reported
   - no "AODA compliant" or "ADA compliant" claims in any copy
+  - mockup legal: invented name and wordmark (no real logo), mock address, phone and email everywhere including JSON-LD, the footer and the accessibility page, stock media only, nothing copied or hot-linked from the business's site, no real testimonials, staff, clients or licence numbers; any real asset used is one the user explicitly confirmed, and that confirmation is recorded in the design guideline and `SETUP.md`
+  - live handover only: every mock value replaced with real details from the user, and `build_preview.py` no longer reports mock data
   - `SETUP.md` documents the domain's 404 assignment and the form's on-submit redirect target
   - all files written into `{PREFIX}-ghl-site/` at the paths above
   - `index.html` and `site.json` regenerated by `build_preview.py` after the last change, and every page opens in it without console errors

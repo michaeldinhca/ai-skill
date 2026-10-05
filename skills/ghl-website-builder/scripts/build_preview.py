@@ -8,7 +8,8 @@ Reads global/01-03, every pages/*.html and every drafts/*.html, and writes:
               page at a time, like GHL does: head code, header, the page body, footer.
               ?page=<slug> picks a page, ?page=draft:<slug> a Phase 2 mockup, ?bar=0 hides
               the preview bar. An unknown page shows pages/404.html, like the live site.
-  site.json   small manifest (name, pages, drafts, updated, linkCheck) for tools that list previews.
+  site.json   small manifest (name, pages, drafts, updated, mock, linkCheck) for tools that list
+              previews. "mock" is true while the standard mock address, phone or email is present.
 
 It also checks every internal link: each /slug must be a page or draft, each #anchor a real id,
 no placeholder (#) or relative links. Broken links are printed and the exit code is 1; the
@@ -289,6 +290,14 @@ def build(folder, name=None):
         "pages": [{"slug": s, "label": labels[s], "url": f"index.html?page={s}"} for s in order],
         "drafts": [{"slug": s, "label": labels[s], "url": f"index.html?page=draft:{s}"} for s in sorted(drafts)],
     }
+    everything = "\n".join([head, header, footer, *pages.values(), *drafts.values()])
+    digits = re.sub(r"\D", "", everything)
+    mock_found = [label_ for label_, hit in (
+        ("address 001 NoWhere Avenue", "001 nowhere avenue" in everything.lower()),
+        ("phone +1 999-999-9999", "19999999999" in digits or "999-999-9999" in everything),
+        ("email info@mockup.ngynsolutions.com", "info@mockup.ngynsolutions.com" in everything.lower()),
+    ) if hit]
+    manifest["mock"] = bool(mock_found)
     broken, unlinked = check_links(header, footer, pages, drafts)
     manifest["linkCheck"] = {
         "broken": [{"file": f, "href": h, "problem": p} for f, h, p in broken],
@@ -297,6 +306,10 @@ def build(folder, name=None):
     (folder / "site.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Wrote {index} ({len(order)} pages, {len(drafts)} drafts)")
 
+    if mock_found:
+        print(f"MOCK DATA present ({'; '.join(mock_found)}). Correct for a mockup; replace before any live handover.")
+    else:
+        print("No mock contact details found. If this is a mockup, it must use them (references/mockup-legal.md).")
     if unlinked:
         print(f"WARNING: nothing links to: {', '.join(unlinked)} (reachable only through the preview bar)")
     if broken:

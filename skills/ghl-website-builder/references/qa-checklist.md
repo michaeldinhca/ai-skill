@@ -18,6 +18,7 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 
 ## QA before publishing (always in Preview, never the builder canvas)
 
+- **No mock data on a live site.** `001 NoWhere Avenue`, `+1 999-999-9999`, `info@mockup.ngynsolutions.com` and the invented business name are for mockups only. Search every file for them and confirm `build_preview.py` reports none before publishing to a real domain.
 - Content runs edge to edge, no white strips at top or sides.
 - Header transparent over a dark hero, solid after scroll and on light pages. Logo visible.
 - Mobile menu opens, closes on link tap and Escape.

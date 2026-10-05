@@ -62,7 +62,7 @@ Optional site controls that drive the core: a header button `<button type="butto
 
 Every site ships `pages/accessibility.html` at `/accessibility`, built from `AODA-ADA/templates/accessibility-statement.html` as a normal page body in the site's own style (same rules as any page: scoped CSS, one H1, full-width script). The template is a full HTML document; take its content, not its `<head>` or its script tags (the core already loads site-wide).
 
-- Fill every `{{PLACEHOLDER}}`. **Ask the user for the real accessibility email, phone and mailing address; never invent them.** Keep the feedback and accessible-formats sections (AODA requires them). Delete optional sections that don't apply rather than leaving placeholders.
+- Fill every `{{PLACEHOLDER}}`. **For a confirmed real client, ask the user for the real accessibility email, phone and mailing address; never invent them.** In a mockup, use the invented business name and the fixed mock email, phone and address from `references/mockup-legal.md` (also for `feedbackEmail` in the config); they get replaced at live handover. Keep the feedback and accessible-formats sections (AODA requires them). Delete optional sections that don't apply rather than leaving placeholders.
 - Link it in **every footer** (it lives in `global/03-global-footer.html`, so one link covers every page).
 - `statementUrl` and `feedbackEmail` in the config match it.
 
