@@ -68,6 +68,6 @@ Every site ships `pages/accessibility.html` at `/accessibility`, built from `AOD
 
 ## 5. Before handing over
 
-1. Open every page with `?aoda-audit` and fix every error. In the site preview that's `index.html?page=<slug>&aoda-audit`. Drafts render in an iframe that doesn't see the URL, so for Phase 2 drafts temporarily add `audit: true` to the draft's config instead, and remove it after.
+1. Open every page with `?aoda-audit` and fix every error. In the site preview that's `<slug>.html?aoda-audit` (`index.html?aoda-audit` for the homepage), for built pages and drafts alike.
 2. Tab through each whole page with the keyboard only: skip link, nav, mobile menu (Escape closes, focus returns), every link and button, the form, the toolbar.
 3. Report anything left over (axe or Lighthouse findings, form iframe issues, contrast on video frames) instead of declaring the site compliant.

@@ -12,7 +12,7 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 4. Homepage: one section with one Custom HTML/JS element containing `pages/home.html`. Set the homepage path to `/` and redirect `/home`.
 5. 404 page: create a page with `pages/404.html`, then Settings > Domains > the domain's three-dot menu > Edit > set it as that domain's 404/Error page.
 6. Thank you page: create a page with `pages/thank-you.html`, not linked in nav. Then in the form builder: gear icon > Options tab > On Submit > redirect to this page's full published URL.
-7. Page settings on every page: SEO title, meta description, social image from the design output's page-settings parts.
+7. Page settings on every page: SEO title, meta description and social image, copied from the page settings comment at the top of each page file. GHL generates the live site's title, description and social tags from these; they are never duplicated in code.
 8. Form builder: open the form itself (not the site or page) and paste `global/04-form-custom-css.css` into its Styles panel, Custom CSS field. Chat widget: match the brand colours.
 9. Upload media to the Media Library and replace every image token with its URL.
 

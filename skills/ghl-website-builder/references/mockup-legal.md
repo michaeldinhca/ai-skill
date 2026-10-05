@@ -16,6 +16,10 @@ The same reasoning covers things the five rules don't name. In a mockup, do not 
 
 These fixed values replace the usual "ask, never invent" rule **for mockups only**: a mockup doesn't ask for the real phone, address or email, and doesn't leave them blank. The accessibility config and statement page use the same mock email, phone and address.
 
+## Indexing
+
+Mockups with the mock identity are published to be indexed by search engines (`references/seo-geo.md`). That is only safe because nothing on them points at a real business. **A site that shows a real business's name, logo or contact details, even with the user's confirmation, is built with `--noindex`** unless the user explicitly asks for it to be indexed: an indexed page under someone else's business name competes with them in search results.
+
 ## Looking at the real site is fine; copying from it is not
 
 Reading the business's current site to understand what they do, who they serve and what a better site would need is fine and expected. Taking anything from it into the mockup is not: logo, images, video, copy, project details, names, numbers.

@@ -95,7 +95,7 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
 
 **Phase 3** delivers exactly these 5 parts:
 
-- **PART 1**: GHL page settings: page name / URL slug / SEO title (max 60 characters) / meta description (150 to 160 characters) / social image
+- **PART 1**: GHL page settings: page name / URL slug / SEO title (max 60 characters) / meta description (150 to 160 characters) / social image. The same values go in the page settings comment at the top of the page file, in the format in `references/seo-geo.md`, because the preview builder reads them from there
 - **PART 2**: Page outline (numbered, one line each)
 - **PART 3**: Complete code in one code block (no abbreviations, no "unchanged" comments), also written to `pages/{SLUG}.html` in the site's project folder
 - **PART 4**: Placeholder and media list (or "None"). Include the Unsplash/video URL keep-or-swap decision from Phase 3
@@ -114,7 +114,8 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
   - contact `id="contact"`
   - no relative image paths
   - file written to `pages/{SLUG}.html` in the existing project folder, draft removed, preview rebuilt
-  - `index.html?page={SLUG}&aoda-audit` shows zero errors, keyboard tab-through done, anything left over reported
+  - `{SLUG}.html?aoda-audit` in the preview shows zero errors, keyboard tab-through done, anything left over reported
+  - SEO and GEO (`references/seo-geo.md`): page settings comment at the top of the file with a unique SEO title (60 or fewer), a 150 to 160 character meta description and a social image; content in real HTML, answer-first, with a visible FAQ and matching `FAQPage` JSON-LD where the page has one; no business or rating schema while the site is a mockup; `build_preview.py` reports no SEO errors
   - `build_preview.py` reports zero broken links, and this page isn't in its "nothing links to" warning (linked from nav, footer or another page; any changed global file or page delivered too)
   - reduced motion respected
   - no horizontal scroll at 375, 800, 1440
