@@ -52,22 +52,48 @@ function HomePage() {
 import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { BackToTop } from "@/components/back-to-top";
+import { AodaLoader } from "@/components/aoda-loader";
 
-export function SiteLayout({ children }: { children: ReactNode }) {
+export function SiteLayout({ children, heroOverlay = false }: { children: ReactNode; heroOverlay?: boolean }) {
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
-      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground">
-        Skip to content
-      </a>
-      <SiteHeader />
+      <SiteHeader overlay={heroOverlay} />
       <main id="main" className="flex-1">{children}</main>
       <SiteFooter />
+      <BackToTop />
+      <AodaLoader />
     </div>
   );
 }
 ```
 
-Header: nav links as `<Link to="..." activeProps={{ className: "text-foreground" }}>`; mobile menu with shadcn `Sheet` (button has `aria-label="Open menu"`).
+(The AODA core adds its own skip link when the page has none.)
+
+```tsx
+// src/components/aoda-loader.tsx
+import { useEffect } from "react";
+
+export function AodaLoader() {
+  useEffect(() => {
+    const w = window as typeof window & { AODA_ADA_CONFIG?: Record<string, unknown> };
+    w.AODA_ADA_CONFIG = {
+      statementUrl: "/accessibility",
+      feedbackEmail: "info@mockup.ngynsolutions.com",
+      side: "left",
+      tokens: { "--aoda-accent": "oklch(...)", "--aoda-accent-strong": "oklch(...)", "--aoda-on-accent": "oklch(...)", "--aoda-accent-soft": "oklch(...)", "--aoda-font": "'Body', 'Body Fallback', sans-serif" },
+    };
+    if (document.querySelector('script[data-aoda-core]')) return;
+    const s = document.createElement("script");
+    s.src = "/aoda-ada.min.js";
+    s.dataset.aodaCore = "";
+    document.head.appendChild(s);
+  }, []);
+  return null;
+}
+```
+
+Header: fixed bar; `overlay` = transparent until 40px scroll, otherwise solid with a spacer; keep `document.documentElement.style.scrollPaddingTop` equal to its height. Nav links as `<Link to="..." activeProps={{ className: "text-foreground" }}>`; mobile menu with shadcn `Sheet` (button has `aria-label="Open menu"`).
 
 ## Server function
 
@@ -108,7 +134,7 @@ export const submitContact = createServerFn({ method: "POST" })
 ```tsx
 // src/routes/contact.tsx
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -136,11 +162,12 @@ function ContactPage() {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
     useForm<Values>({ resolver: zodResolver(schema) });
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null);
+  const navigate = useNavigate();
 
   const onSubmit = async (values: Values) => {
     const res = await submitContact({ data: values });
     setResult(res);
-    if (res.success) reset();
+    if (res.success) { reset(); navigate({ to: "/thank-you" }); }
   };
 
   return (

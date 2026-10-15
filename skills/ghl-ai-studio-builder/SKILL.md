@@ -1,55 +1,74 @@
 ---
 name: ghl-ai-studio-builder
-description: Build, extend, or fix a website for GoHighLevel (GHL) AI Studio, which runs a fixed TanStack Start v1 project (React 19, Vite 7, TanStack Router file routes, Tailwind CSS v4 with oklch tokens, shadcn/ui, lucide-react, react-hook-form + zod, createServerFn form handling). Produces complete, drop-in route/component/server-function files that paste straight into AI Studio and run. Use this whenever the user mentions GHL AI Studio, HighLevel AI Studio, an AI Studio site, or asks for a TanStack Start site meant for GHL, or pastes AI Studio's own "build a complete production-ready website" prompt. Do NOT use it for classic GHL website/funnel builder pages built from Custom HTML/JS elements; that is the ghl-website-builder skill.
+description: Build, extend, or fix a website for GoHighLevel (GHL) AI Studio, which runs a fixed TanStack Start v1 project (React 19, Vite 7, TanStack Router file routes, Tailwind CSS v4 with oklch tokens, shadcn/ui, lucide-react, react-hook-form + zod, createServerFn form handling). Same design process as ghl-website-builder (plan, single-file mockup, design guideline, utility pages, accessibility core, mockup legal, SEO/GEO); only the final build step differs, producing complete drop-in route/component/server-function files. Use this whenever the user mentions GHL AI Studio, HighLevel AI Studio, an AI Studio site, asks for a TanStack Start site meant for GHL, or pastes AI Studio's own "build a complete production-ready website" prompt. Do NOT use it for classic GHL website/funnel builder pages built from Custom HTML/JS elements; that is ghl-website-builder.
 argument-hint: [new-site|new-page|fix]
 ---
 
 # GHL AI Studio Builder
 
-GHL AI Studio is not the classic GHL page builder. It hosts a real React app on a **fixed** stack, and it only accepts files that fit that stack exactly. This skill encodes AI Studio's own build contract (from the instructions AI Studio publishes) plus the house rules from the classic builder, so every delivery is "paste in and run".
+The sibling of `ghl-website-builder`. **The design side is identical**: same inputs, same three gated phases, same mockup, same design guideline, same copy, legal, accessibility, SEO and font rules. **Only the technical target changes**: instead of splitting the approved mockup into GHL's 4 Custom Code layers, Phase 3 converts it into a TanStack Start v1 app that drops into AI Studio and runs.
 
-If the request is about the classic builder (Custom HTML/JS elements, global header/footer, site-wide CSS, iframe form embeds), stop and use `ghl-website-builder` instead.
+This skill depends on `ghl-website-builder` being installed beside it (`../ghl-website-builder/`). Its references are the design source of truth and are read from there, never copied, so the two skills can't drift apart.
 
-## Modes
+## Picking a mode
 
-| Mode | When | Output |
+| Mode | When | Read |
 |---|---|---|
-| `new-site` | A whole site from scratch | every route file, components, server-function file(s), font `<link>` note, token note |
-| `new-page` | One more route on an existing AI Studio site | the new route file, any new components, nav update to the shared header component |
-| `fix` | Something in existing AI Studio code is wrong (build error, broken route, form not submitting, wrong colors) | only the changed files, each complete |
+| `new-site` | Brand-new AI Studio site | `references/prompt-new-site.md` |
+| `new-page` | One more route on an existing AI Studio site | `references/prompt-new-page.md` |
+| `fix` | Something in existing AI Studio code looks or behaves wrong | `references/prompt-change-request.md` |
 
-With an explicit argument use that mode. Otherwise infer it and say so in one line.
+With an explicit argument use that mode. Otherwise infer it and state the inference in one line.
 
 ## Before doing anything else
 
-1. **Read `references/stack-contract.md` every time.** It is the non-negotiable stack, routing, styling, server-function and output rules. Reproduce its templates exactly; do not paraphrase from memory.
-2. **Read `references/templates.md`** for the route, layout, form and server-function skeletons this skill builds from.
-3. **Mockups follow the classic skill's legal rules.** Read `../ghl-website-builder/references/mockup-legal.md`: invented name and wordmark, address `001 NoWhere Avenue, ON, G5G 0R0, Canada`, phone `+1 999-999-9999`, email `info@mockup.ngynsolutions.com`, nothing copied from the real business, until the user explicitly confirms the real identity may be used.
-4. **SEO/GEO and fonts**: read `../ghl-website-builder/references/seo-geo.md` (what a page's title, description and content must do) and `../ghl-website-builder/references/font-library.md` (pairings to offer, avoiding recent ones). In AI Studio the SEO tags go in each route's `head()`, not in a build script.
-5. **Gather required inputs; never guess business facts.** Required for `new-site`: what the business does and for whom, the pages wanted, what the form collects and what should happen on submit, and a visual anchor (logo, brand guide, screenshot, existing-site URL, or explicit permission to propose a palette). If a domain is given and nothing else, fetch the live site to understand the business before proposing anything. Ask only for what's missing. Never invent testimonials, certifications, pricing, service areas or stats; use a marked placeholder and a question.
-6. **For `new-page` and `fix`, work from the real code.** Ask the user to paste the current `src/routes/__root.tsx`, the shared header/footer components, `src/styles.css` (tokens) and the file in question, or point at a local copy. Never rebuild an existing site's look from description.
+1. **Read `references/stack-contract.md` every time.** It is AI Studio's fixed technical contract (stack, files you may and may not touch, routes, server functions, output format) and how each classic design rule maps onto it. It replaces the classic `platform-know-how.md` for anything technical; read `platform-know-how.md` only for its design behavior (header over hero, back-to-top placement, reveal on scroll, utility pages), not its GHL mechanics.
+2. **For `new-site` and `new-page`, read `../ghl-website-builder/references/accessibility.md`**, then the AODA-ADA core's own `README.md` and `CHECKLIST.md` it points to. The WCAG checklist is unchanged; how the core is loaded is in `stack-contract.md`.
+3. **Read `../ghl-website-builder/references/mockup-legal.md` before producing any mockup.** Unchanged: invented name and wordmark, `001 NoWhere Avenue, ON, G5G 0R0, Canada`, `+1 999-999-9999`, `info@mockup.ngynsolutions.com`, free stock media only, until the user explicitly confirms the real identity.
+4. **Read `../ghl-website-builder/references/seo-geo.md`.** Content rules are unchanged; in AI Studio the title, description and social image go into each route's `head()` instead of a page settings comment.
+5. **Read the reference file for the chosen mode** and follow its steps and output format.
+6. **Gather required inputs; do not guess.** Same rule as the classic skill: ask only for missing required fields, default the optional ones, never invent business facts (proof, testimonials, certifications, pricing, service areas, accessibility contact details). Mock identity values are the one exception.
+7. **Never invent the visual identity from nothing.** Same rule as the classic skill: ask for a logo, brand guide, mockup or screenshots (or explicit permission to propose a palette); if only a domain is given, fetch the live site first to understand the business, never to copy it. For `new-page` and `fix`, work from the site's design guideline and its real code, never from description.
 
-## Build flow (new-site, new-page)
+## Build flow: plan, then mockup, then convert for AI Studio
 
-Three gated phases. Each ends with the user, never with you continuing on your own.
+Applies to `new-site` and `new-page`. Three gated phases, each its own response, each ending with the user.
 
-**Phase 1: Plan (text only).** Sitemap with every route path and what links to it; sections per page; mood and tone (a few words each); two font pairings (or the client's fonts); the brand palette as oklch values mapped to AI Studio's semantic tokens (`--primary`, `--accent`, etc.); what the form collects and what the server function does with it. Stop for feedback.
+**Phase 1 and Phase 2 are exactly the classic skill's.** Follow `../ghl-website-builder/SKILL.md` "Build flow" for "Which pages are in this build", "Every expected link must work", Phase 1 (sitemap, sections, mood, tone, fonts from `font-library.md`) and Phase 2 (one self-contained `drafts/<slug>.html` per page with the shared header and footer inline, real working Unsplash images, motion and video where they earn their place, SEO/GEO and accessibility from the first draft, mock identity). Rebuild the preview with `../ghl-website-builder/scripts/build_preview.py <site-folder>` after every draft change; it must report zero broken links before you show anything. Iterate on the drafts until approved. This is the cheap phase to get wrong; the design is judged here, not in AI Studio.
 
-**Phase 2: Files.** Generate the full file set in the output format from `references/stack-contract.md`. Also save every file locally under `{PREFIX}-ai-studio-site/` (same project-relative paths, e.g. `{PREFIX}-ai-studio-site/src/routes/index.tsx`) so there is a durable source of truth; later `new-page`/`fix` runs reuse that folder. Show the files in the response too.
+**Phase 3: Convert to AI Studio.** Only once the mockup is approved. Follow `stack-contract.md`'s "Converting an approved mockup" procedure and the mode's output format. The page must look and behave like the approved mockup: same layout, type, spacing, colors, motion and copy. Translating to React, Tailwind and shadcn/ui is a technical change and never a reason to restyle anything. If a design element can't be reproduced inside the contract, say exactly which one and propose the closest option before changing it.
 
-**Phase 3: QA + handover.** Run `references/qa-checklist.md` against every file and fix failures before answering. End with the checklist graded PASS / FIXED per line, the list of `{/* REPLACE: ... */}` image slots, the token values to set in AI Studio, and install steps.
+## Delivery: one project folder per site
 
-If the user wants it reviewable before pasting into AI Studio and Node is available, offer to scaffold a local TanStack Start project in the site folder and run `npm run build` to prove the files compile. Say it if you couldn't.
+```
+{PREFIX}-ai-studio-site/
+├── index.html, <slug>.html, sitemap.xml, site.json   (generated by build_preview.py from drafts/, never hand-edited)
+├── {PREFIX}-DESIGN-GUIDELINES.md
+├── SETUP.md                       (AI Studio install steps, token values, env vars, image list)
+├── drafts/                        (Phase 2 mockups; kept after conversion as the visual reference)
+└── src/                           (Phase 3 output, mirrors AI Studio's project paths)
+    ├── routes/*.tsx
+    ├── components/*.tsx
+    └── lib/*.functions.ts
+```
 
-## Ground rules in every mode
+- Unlike the classic skill, **drafts are kept after Phase 3**: AI Studio pages aren't static HTML, so the drafts plus the generated preview remain the reviewable, crawlable copy of the design.
+- `new-site` creates the folder; `new-page` adds files to it; `fix` edits in place and reports the paths. If you can't find a site's folder, ask before creating a second one.
+- Files are written to disk and also shown in the response in AI Studio's output format.
 
-- **Stack is fixed.** No Next.js, Remix, react-router-dom, Express, separate API servers, other CSS frameworks, styled-components, or new npm packages. Only what `stack-contract.md` lists.
-- **Never touch** `src/routeTree.gen.ts`, `package.json`, `tsconfig*`, `vite.config.*`, the token definitions in `src/styles.css`, `src/components/ui/*`, or `src/routes/__root.tsx` (one exception: adding font `<link>`s to its `head().links`). Brand colors are delivered as a token note for the user to set, not as edits.
-- **Semantic tokens only** (`bg-background`, `text-foreground`, `bg-primary`, `text-muted-foreground`, `border-border`, ...). No raw palette classes (`bg-white`, `text-black`, `bg-blue-600`), no hex in `className` or `style`.
-- **No external image URLs in code.** Images are placeholder `<div>`s with `{/* REPLACE: <what goes here> */}`, an `aria-label` describing the intended image, and a fixed aspect ratio so layout doesn't jump when swapped. Icons from lucide-react. (This overrides the classic skill's "use real Unsplash URLs" rule.)
-- **Complete files only.** No ellipses, no "rest unchanged", even in `fix` mode for the files you touch.
-- **One H1 per page, unique `head()` title (60 chars max) and description (160 chars max) per route**, semantic landmarks, alt text or `aria-label` on every image slot, keyboard-reachable nav, visible focus, `prefers-reduced-motion` respected for any animation.
-- **No em dashes or en dashes in any visitor-facing copy.** Use a period, comma, colon or a rewritten sentence.
-- **No scrolling marquee/ticker banners** unless the user asks for one.
-- **Never claim** the site is "ADA/AODA compliant" in copy.
-- `{PREFIX}` and other `{TOKEN}` placeholders are substituted everywhere before delivery.
+## After building
+
+- `references/qa-checklist.md`: graded PASS / FIXED per line in every Phase 3 delivery. Fix before answering.
+- `../ghl-website-builder/references/issue-log.md` covers design and accessibility symptoms; technical AI Studio symptoms are in `stack-contract.md` "Known issues".
+
+## Ground rules that apply in every mode
+
+The classic skill's "Ground rules" all apply unchanged except the GHL-specific ones (form skin, 4 layers, px-not-rem, full-width script), which `stack-contract.md` replaces. In particular:
+
+- No em dashes or en dashes anywhere a visitor reads.
+- No scrolling marquee/ticker banners unless asked.
+- Every `new-site` build bundles a 404 page, a thank you page and an accessibility statement page with the homepage.
+- Every site loads the shared AODA-ADA core and passes its checklist; never write a custom accessibility widget or edit the core; never claim "AODA/ADA compliant".
+- Every mockup follows `mockup-legal.md`; any site showing a real business identity is built with `--noindex` unless the user says otherwise.
+- `{PREFIX}` and `{TOKEN}` placeholders substituted everywhere. Complete files only, no "unchanged" placeholders.
+- Every delivery ends with the self-check, PASS or FIXED per line.

@@ -2,6 +2,16 @@
 
 Grade every line PASS or FIXED in the delivery. Fix before answering; don't just report.
 
+## Design parity (the design is the classic skill's)
+- [ ] Phase 1 plan and Phase 2 drafts were approved before any route file was written.
+- [ ] Each route matches its approved `drafts/<slug>.html` section by section: layout, type, spacing, colors, copy, anchors, motion. Any difference was approved by the user.
+- [ ] Design guideline written, font pairing recorded, Tailwind mapping section present.
+- [ ] Header transparent over a dark hero and solid after 40px, solid elsewhere; back-to-top bottom-left above the AODA launcher; reveal only hides below-the-fold elements.
+- [ ] 404 (`$.tsx`, noindex), thank you and accessibility routes built with the same layout and tokens, not in nav, accessibility linked in footer with real or mock-per-legal details.
+- [ ] AODA core loaded via `aoda-loader` with config first (`statementUrl`, `feedbackEmail`, `side: 'left'`, brand tokens), core file untouched.
+- [ ] Fonts: client fonts unchanged or a `font-library.md` pairing not used recently; only used weights; fallback faces in the stacks.
+- [ ] `build_preview.py` on the folder exits clean (zero broken links, no SEO errors); drafts kept.
+
 ## Stack and files
 - [ ] Only stack imports: `@tanstack/react-router`, `@tanstack/react-start`, `react`, `@/components/ui/*`, `@/components/*`, `@/lib/*`, `lucide-react`, `recharts`, `react-hook-form`, `zod`, `@hookform/resolvers/zod`. No react-router-dom, next/*, axios, new packages.
 - [ ] No output for `routeTree.gen.ts`, `package.json`, `tsconfig`, `vite.config`, `src/styles.css` tokens, `src/components/ui/*`. `__root.tsx` only touched for font links, delivered as a note.
