@@ -118,5 +118,6 @@ This mode follows the 3-phase Build flow from the top-level `SKILL.md` (Plan →
   - SEO and GEO (`references/seo-geo.md`): page settings comment at the top of the file with a unique SEO title (60 or fewer), a 150 to 160 character meta description and a social image; content in real HTML, answer-first, with a visible FAQ and matching `FAQPage` JSON-LD where the page has one; no business or rating schema while the site is a mockup; `build_preview.py` reports no SEO errors
   - `build_preview.py` reports zero broken links, and this page isn't in its "nothing links to" warning (linked from nav, footer or another page; any changed global file or page delivered too)
   - reduced motion respected
-  - no horizontal scroll at 375, 800, 1440
+  - mobile first (`references/mobile-first.md`): phone layout as the base CSS, checked at 390px first; first phone screen shows what the page offers and its CTA; tap targets 44px or more
+  - no horizontal scroll at 320, 375, 390, 800, 1440
   - under 60 KB

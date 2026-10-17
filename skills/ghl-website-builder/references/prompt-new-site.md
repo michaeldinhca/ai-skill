@@ -132,5 +132,6 @@ This mode builds the homepage plus every sub page requested (the page URLs in `N
   - one H1 per page
   - title and meta not in code
   - reduced motion respected
-  - no horizontal scroll at 375, 800, 1440
+  - mobile first (`references/mobile-first.md`): base CSS is the phone layout with `min-width` queries for larger screens; checked at 390px first, then 375, 320, 800 and 1440; first phone screen shows the offer and main CTA; body text 16px or more; tap targets 44px or more; fixed elements don't overlap on a phone; hero media has a light mobile form
+  - no horizontal scroll at 320, 375, 390, 800, 1440
   - each block under 60 KB

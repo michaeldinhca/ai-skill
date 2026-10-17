@@ -30,5 +30,5 @@ All paths below are relative to the site's `{PREFIX}-ghl-site/` project folder. 
 - Visit a URL that doesn't exist on the domain: the branded 404 page loads, not GHL's default error page.
 - Chat opens and does not cover the back-to-top button; the accessibility launcher (bottom-left) doesn't overlap back-to-top or a mobile sticky bar.
 - Accessibility: every page with `?aoda-audit` shows zero errors; keyboard-only pass through every page and the form (Tab, Shift+Tab, Enter, Escape); toolbar opens, its settings apply, "Stop animations" pauses any JS motion; footer links to `/accessibility`. Report anything left over rather than calling the site compliant.
-- Check 375px, 800px and 1440px widths. No sideways scroll.
+- Check on a real phone first, then 390px, 375px, 320px, 800px and 1440px. No sideways scroll, nothing overlapping, tap targets comfortable, the first phone screen shows the offer and the main call to action.
 - Scroll through slowly once: scroll-triggered animations only play when their section is on screen, so full-page screenshots can look "unfinished".
