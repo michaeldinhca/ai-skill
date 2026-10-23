@@ -1,7 +1,7 @@
 ---
 name: ghl-website-builder
-description: Build, extend, or fix a client website inside GoHighLevel (GHL) using a tested 4-layer architecture (site-wide CSS, global header, global footer, per-page body) that survives GHL's known quirks (boxed content width, theme CSS leaking into custom code, the builder canvas not running JS, iframe form embeds). Use this whenever the user is building a new GHL client site, adding/replacing a page on an existing GHL site, or debugging a GHL page that looks wrong (boxed/narrow content, wrong fonts or heading colors, broken sticky header, menu not working, form not styled, script "not doing anything" in the editor). Trigger on any mention of GoHighLevel, GHL, HighLevel website/funnel builder, GHL Custom HTML/JS / Custom Code elements, or GHL header/footer/page code, even if the user doesn't name this skill directly.
-argument-hint: [new-site|new-page|fix]
+description: Build, extend, or fix a client website inside GoHighLevel (GHL) using a tested 4-layer architecture (site-wide CSS, global header, global footer, per-page body) that survives GHL's known quirks (boxed content width, theme CSS leaking into custom code, the builder canvas not running JS, iframe form embeds). Use this whenever the user is building a new GHL client site, adding/replacing a page on an existing GHL site, or debugging a GHL page that looks wrong (boxed/narrow content, wrong fonts or heading colors, broken sticky header, menu not working, form not styled, script "not doing anything" in the editor). Trigger on any mention of GoHighLevel, GHL, HighLevel website/funnel builder, GHL Custom HTML/JS / Custom Code elements, or GHL header/footer/page code, even if the user doesn't name this skill directly. Also use it, in mockup-fix mode, when a message says a mockup site has client review comments "sent to desktop", or the user types /mockup-fix or asks to fix a mockup's review comments.
+argument-hint: [new-site|new-page|fix|mockup-fix]
 ---
 
 # GHL Website Builder
@@ -15,10 +15,13 @@ A reusable playbook for building any client website in GoHighLevel, distilled fr
 | `new-site` | Brand-new client site from scratch | `references/prompt-new-site.md` |
 | `new-page` | Adding/replacing one page on a site that already has the 4 layers built | `references/prompt-new-page.md` |
 | `fix` | Something in existing GHL code looks or behaves wrong | `references/prompt-change-request.md` |
+| `mockup-fix` | Client review comments on a mockup site, sent to desktop from mockup.ngynsolutions.com | `references/mockup-fix.md` |
 
 If invoked with an explicit argument (`/ghl-website new-site`, etc.), use that mode directly. If invoked with freeform text and no argument, infer the mode from what's being asked and state the inference in one line before proceeding (e.g. "This sounds like a new page for an existing site, so using new-page mode.").
 
 ## Before doing anything else
+
+**`mockup-fix` mode: read `references/mockup-fix.md` and follow it, skipping the steps below.** It still follows the standing copy rules (no em or en dashes, no marquee tickers) and `references/mockup-legal.md` for anything it writes or changes.
 
 1. **Read `references/platform-know-how.md` first, every time.** It is the hard-won set of platform rules (architecture, CSS scoping, the full-width fix script, header/footer behavior, JS, forms, media, SEO). All three modes depend on it and it does not change per client. But re-read it each invocation rather than relying on memory, since it contains exact code (the full-width script, the CSS shield) that must be reproduced correctly, not paraphrased.
 2. **For `new-site` and `new-page`, read `references/accessibility.md`, then the AODA-ADA core's own `README.md` and `CHECKLIST.md` it points to.** Every site loads the shared accessibility core and has to pass its WCAG 2.1 AA checklist; that shapes the markup from the first draft, so it can't be bolted on in Phase 3.
