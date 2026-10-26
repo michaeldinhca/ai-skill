@@ -58,3 +58,10 @@ Newest lessons go at the bottom of each section. Verified = seen working on a re
 - **hreflang `<link rel="alternate">` does not survive** (stripped from head code); not yet solved. `check_live.ps1` shows it missing.
 - **No og:image appears until the SEO panel Images field is set** (upload the share image to Media Storage first).
 - `ghl_do.mjs` `eval` returning nothing used to crash the runner; fixed. A PowerShell-written `steps.json` had a BOM that broke JSON parsing; the runner now strips it.
+
+## Updating a Global Section (header/footer) that already exists
+- **The pencil icon in Saved Assets > Global Sections only renames** ("Update This Section"). Do not use it to change code. The section's own save icon says "Section already saved as Global" and does nothing: that is normal.
+- **To change a global section:** open ANY page that contains it, click inside the section's Custom HTML/JS element, settings (top-right icon) > Open Code Editor, `ghl_paste.mjs <file> shot body`, Save in the dialog, then **save the page**. GHL shows "Section Changes Made: these changes will sync across other instances where this section is used", click **Save** in that dialog, then **Publish** (the owner's rule: no save + publish, no change live).
+- After one page is saved and published, every page that uses the section serves the new code (verified: English and French pages updated within about 60 s without republishing them). Confirm with `check_live.ps1` or by grepping the public HTML for a marker that only the new code has.
+- Before changing a global, tell the owner: it changes every page at once. Do it when they say so (this owner wanted the French pages built first, then the globals).
+- Paste the header and the footer one after the other; save the page after each if GHL shows the sync dialog twice.

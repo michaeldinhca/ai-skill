@@ -37,3 +37,10 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Fix / workaround: see gotchas.md sections Coordinates, Creating pages, Builder timing.
 - Proposed improvement: one `ghl_page.mjs` script that does the whole per-page flow from a page file (create page, paste, SEO, head code, globals, publish, live check); script to set the Images (share image) field; test whether hreflang can go in "Custom meta tags".
 - Applied: partly (ghl_do.mjs: DPR scaling, `set`, key chords, BOM, eval fix; ghl_drag.mjs: DPR scaling).
+
+### 2026-10-26 global header and footer replaced with bilingual versions
+- Worked: editing the code inside the global section from an open page, `ghl_paste.mjs` hash match, "Section Changes Made" dialog Save, Save page, Publish; all pages (EN and FR) showed the new header and footer after about 60 s.
+- Failed or slow: clicked the pencil icon first (it only renames); clicked the section's save icon (says already saved as Global); my first Save/Publish clicks after the dialog did not register because the sync confirmation dialog was in the way.
+- Fix / workaround: see gotchas.md "Updating a Global Section".
+- Proposed improvement: script that, after pasting, detects and confirms the "Section Changes Made" dialog before saving and publishing.
+- Applied: yes (gotchas.md, SKILL.md).

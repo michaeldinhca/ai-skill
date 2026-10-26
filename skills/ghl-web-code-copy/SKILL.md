@@ -1,4 +1,4 @@
----
+﻿---
 name: ghl-web-code-copy
 description: Copy finished website code (head code, global header/footer, page bodies, per-page SEO settings, share images) into a GoHighLevel (GHL) site by driving a logged-in browser the user controls, then prove each page is saved, published and live. Use this when the user has a site's code ready (for example from ghl-website-builder) and wants Claude to "put it into GHL", "create the pages in GHL", "paste the code", "publish the pages", "set the SEO fields", or "upload the share images", or when a GHL copy session needs the known workarounds for the page builder. Also use it at the start of any such session to record lessons in its feedback log. Trigger on GHL page builder automation, Tracking Code, Custom HTML/JS element, Global Section, Saved Assets, GHL SEO panel.
 argument-hint: [setup|copy-site|copy-page|seo|media|verify|feedback]
@@ -43,7 +43,7 @@ Formats: `references/page-file-format.md`. UI map: `references/ui-map.md`.
 ## Workflow - mode `copy-site`
 Default order (confirm with the user):
 1. **Site head code** (`</>` Tracking Code > Header, `head`/`body` as the file says). Keep to what survives: no `<link>`.
-2. **Global header and footer**: edit the Global Sections' code (Saved Assets), then make sure each page has them (drag in).
+2. **Global header and footer**: change the code through any page that contains them (not the pencil icon, see gotchas: Updating a Global Section), Save the sync dialog, Save page, Publish. New pages get them by dragging from Saved Assets > Global Sections. Only touch existing globals when the owner says so.
 3. **Pages**, one at a time: create page + slug, add Row + Custom HTML/JS element, paste body, add global header above and footer below, Save.
 4. **Per page SEO**: SEO panel (title, description, social image URL, language, canonical), then page Header code from `HEAD-CODE-BEGIN..END`.
 5. **Publish**, wait about 60 s, `check_live.ps1` (and on a phone-size screenshot if the user asks).
