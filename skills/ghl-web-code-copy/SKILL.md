@@ -12,7 +12,8 @@ Moves prepared code into GHL and verifies it, with the user watching and logged 
 1. **The user logs in; you drive.** Open a separate browser profile with the debug port; never ask for, type or store passwords. A GHL API key is not needed and the builder cannot be done by API anyway.
 2. **Ask before starting** (one question, not many): which site/location URL, which pages in which order, and which things the owner keeps for themselves (forms, redirects, DNS, favicon, deleting anything).
 3. **One page at a time, with proof.** Paste, Save (dialog), Save (page), Publish, `check_live.ps1`, screenshot. Show the user what you saw. Never claim "done" without the live check.
-4. **New pages are live immediately.** Create them with the final slug and finish them promptly.
+4. **Never clone a page.** Every page is made with "Add new page". Clones carry broken metadata.
+5. **New pages are live immediately.** Create them with the final slug and finish them promptly.
 5. **Don't change what you weren't asked to.** No deleting pages, no replacing existing pages' content without telling the user which page and what will be lost.
 6. Log what you learn (see Feedback).
 

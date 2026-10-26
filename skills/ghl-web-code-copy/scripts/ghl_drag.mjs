@@ -1,4 +1,4 @@
-// Drag with a real mouse from one point to another, with a "hover" screenshot before the drop.
+﻿// Drag with a real mouse from one point to another, with a "hover" screenshot before the drop.
 // Needed for GHL "Saved Assets > Global Sections": clicking a global section does nothing, dragging it onto the page works.
 //
 //   node ghl_drag.mjs x1 y1 x2 y2 shot.png
@@ -15,7 +15,8 @@ const browser = await puppeteer.connect({ browserURL: DEBUG, defaultViewport: nu
 const all = await browser.pages();
 const page = all.find(p => p.url().includes('page-builder')) || all[0];
 await page.bringToFront();
-const A = [+x1, +y1], B = [+x2, +y2];
+const dpr = await page.evaluate(() => window.devicePixelRatio || 1); // coordinates are SCREENSHOT pixels
+const A = [+x1 / dpr, +y1 / dpr], B = [+x2 / dpr, +y2 / dpr];
 await page.mouse.move(A[0], A[1]); await wait(250);
 await page.mouse.down(); await wait(300);
 const N = 25;

@@ -1,4 +1,4 @@
-// Step runner for the GHL website builder, driven through a logged-in browser started by launch-browser.ps1.
+﻿// Step runner for the GHL website builder, driven through a logged-in browser started by launch-browser.ps1.
 //
 //   node ghl_do.mjs steps.json
 //
@@ -7,9 +7,9 @@
 //   {"wait":2500}                                pause (ms)
 //   {"click":"Exact visible text","nth":0}       real mouse click on the nth element whose text matches exactly ("last" allowed)
 //        optional "scope":"css selector"         limit the search
-//   {"clickxy":[x,y]}                            real mouse click at page coordinates (use after a screenshot)
+//   {"clickxy":[x,y]}                            real mouse click at SCREENSHOT pixel coordinates (divided by devicePixelRatio for you)
 //   {"fill":"placeholder|aria-label|name|css","value":"..."}   focus a field, select all, type the value
-//   {"type":"text"}  {"press":"Enter"}           keyboard
+//   {"set":"placeholder|aria-label|name","value":"..."}   set an input/textarea value directly (use for SEO fields; typing breaks when the panel re-lays out)`n//   {"type":"text"}  {"press":"Enter"} or a chord {"press":"Control+A"}   keyboard
 //   {"eval":"js expression"}                     run in the builder frame (or the page) and print the result
 //   {"text":true}                                print the visible text of the builder frame (or page)
 //   {"shot":"C:\\path\\shot.png"}                screenshot of the whole window
@@ -24,7 +24,7 @@ import fs from 'node:fs';
 
 const stepsFile = process.argv[2];
 if (!stepsFile) { console.error('usage: node ghl_do.mjs steps.json'); process.exit(1); }
-const steps = JSON.parse(fs.readFileSync(stepsFile, 'utf8'));
+const steps = JSON.parse(fs.readFileSync(stepsFile, 'utf8').replace(/^\uFEFF/, ''));
 const DEBUG = process.env.GHL_DEBUG_URL || 'http://127.0.0.1:9222';
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
@@ -71,7 +71,7 @@ for (const s of steps) {
     if (!b) { console.log('!! NOT FOUND: ' + s.click); continue; }
     await mouse(b.x, b.y); console.log(`click "${s.click}" (${b.n} match${b.n > 1 ? 'es' : ''})`); continue;
   }
-  if (s.clickxy) { await mouse(s.clickxy[0], s.clickxy[1]); console.log('clickxy ' + s.clickxy); continue; }
+  if (s.clickxy) { const r = await page.evaluate(() => window.devicePixelRatio || 1); await mouse(s.clickxy[0] / r, s.clickxy[1] / r); console.log('clickxy ' + s.clickxy + (r !== 1 ? ' (screenshot px, scaled by DPR ' + r + ')' : '')); continue; }
   if (s.fill) {
     const c = await ctx();
     const ok = await c.f.evaluate((q) => {
@@ -85,9 +85,23 @@ for (const s of steps) {
     await page.keyboard.press('Backspace');
     await page.keyboard.type(s.value, { delay: 15 }); console.log(`filled "${s.fill}"`); continue;
   }
+  if (s.set) {
+    // set a React-controlled input/textarea by placeholder / aria-label / name, without typing (immune to layout shifts)
+    const c = await ctx();
+    const r = await c.f.evaluate((q, v) => {
+      const els = [...document.querySelectorAll('input, textarea')].filter(e => e.offsetParent !== null);
+      const el = els.find(e => e.placeholder === q || e.getAttribute('aria-label') === q || e.name === q);
+      if (!el) return 'NOT FOUND';
+      const proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+      Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, v);
+      el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true }));
+      return el.value === v ? 'ok' : 'value differs';
+    }, s.set, s.value);
+    console.log(`set "${s.set}": ${r}`); continue;
+  }
   if (s.type) { await page.keyboard.type(s.type, { delay: 10 }); console.log('typed ' + s.type.length + ' chars'); continue; }
-  if (s.press) { await page.keyboard.press(s.press); console.log('press ' + s.press); continue; }
-  if (s.eval) { const c = await ctx(); console.log('eval => ' + JSON.stringify(await c.f.evaluate(s.eval)).slice(0, 900)); continue; }
+  if (s.press) { const k = s.press.split('+'); for (const x of k.slice(0, -1)) await page.keyboard.down(x); await page.keyboard.press(k[k.length - 1]); for (const x of k.slice(0, -1).reverse()) await page.keyboard.up(x); console.log('press ' + s.press); continue; }
+  if (s.eval) { const c = await ctx(); console.log('eval => ' + String(JSON.stringify(await c.f.evaluate(s.eval))).slice(0, 900)); continue; }
   if (s.text) { const c = await ctx(); console.log('text: ' + (await c.f.evaluate(() => document.body.innerText.replace(/\s+/g, ' ').slice(0, 1400)))); continue; }
   if (s.shot) { await page.screenshot({ path: s.shot }); console.log('shot -> ' + s.shot); continue; }
   if (s.upload) {

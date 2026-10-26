@@ -30,3 +30,10 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Fix: all of the above are in `gotchas.md`.
 - Proposed improvement: test whether hreflang can survive via SEO panel "Custom meta tags"; test `upload` step in `ghl_do.mjs`; add a script that sets SEO panel fields from the "GHL PAGE SETTINGS" comment.
 - Applied: yes (gotchas.md, scripts)
+
+### 2026-10-26 second session: French pages (home, careers, accessibility, 404) in GHL
+- Worked: Add new page flow, ghl_paste (88 KB home page body matched sha1), `set` step for SEO fields, drag global header/footer, Publish, check_live (all four pages live with correct lang, title, description, canonical, geo, noindex on 404).
+- Failed or slow: cloning a page (owner forbids; metadata errors); screenshots were in 1.25x device pixels so clicks missed until `clickxy` divided by devicePixelRatio; toolbar icons needed a second click; typing SEO fields broke when the panel re-laid out; descriptions over 154 chars flagged by GHL.
+- Fix / workaround: see gotchas.md sections Coordinates, Creating pages, Builder timing.
+- Proposed improvement: one `ghl_page.mjs` script that does the whole per-page flow from a page file (create page, paste, SEO, head code, globals, publish, live check); script to set the Images (share image) field; test whether hreflang can go in "Custom meta tags".
+- Applied: partly (ghl_do.mjs: DPR scaling, `set`, key chords, BOM, eval fix; ghl_drag.mjs: DPR scaling).
