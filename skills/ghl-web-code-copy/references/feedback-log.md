@@ -57,3 +57,9 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Failed or slow: first tried the page-builder iframe selectors in the form builder; page list order shifted after earlier edits so a fixed click opened the wrong page (English 404; nothing changed). Always confirm the page name (eval on page text) before pasting.
 - Proposed improvement: `ghl_do.mjs` `expect` step that aborts the run when the open page's name is not the intended one; a `ghl_form_translate.mjs` that takes a JSON of labels.
 - Applied: partly (ghl_do.mjs: form-builder iframe, setafter).
+
+### 2026-10-26 English pages, share images, hreflang, Lighthouse agent audits
+- Worked: media upload via hidden input; `ghl_seo.mjs`; JS-created hreflang; per page flow in about 10 calls; a verify script over all 10 URLs (title/description length, canonical, og:image, hreflang count, header/footer).
+- Failed or slow: bulk image-URL replace hit body photos (reverted); PowerShell alias clash (`Rd`) sent empty SEO values (caught before saving); canonical "already present" false positive; card lookup missed one name.
+- Proposed improvement: a `ghl_page.mjs` that runs the whole per-page flow; `expect` step to abort when the open page is not the intended one; check_live.ps1 should render with a headless browser to see JS-created tags.
+- Applied: yes (gotchas.md, ghl_seo.mjs).
