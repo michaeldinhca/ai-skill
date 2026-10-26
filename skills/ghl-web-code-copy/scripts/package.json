@@ -1,0 +1,9 @@
+{
+  "name": "ghl-web-code-copy-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Browser helpers for copying finished GHL page code into the website builder. Run `npm install` once in this folder.",
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

@@ -7,6 +7,8 @@ Reusable [Claude Code](https://claude.com/claude-code) skills: packaged workflow
 - [`skills/ghl-website-builder`](skills/ghl-website-builder/SKILL.md): build, extend, or fix a client website in GoHighLevel (GHL) using a tested 4-layer architecture that survives GHL's platform quirks (boxed content width, theme CSS bleed, an editor canvas that doesn't run JS, iframe form embeds). Three modes: `new-site`, `new-page`, `fix`. Each client site lives in its own `{prefix}-ghl-site/` folder with generated static pages at its root (`index.html` plus one file per page, each with full SEO and social tags, and a `sitemap.xml`), ready for any static mockup host and for search engines.
 - [`skills/ghl-ai-studio-builder`](skills/ghl-ai-studio-builder/SKILL.md): the same design process as `ghl-website-builder` (inputs, plan, single-file mockup, design guideline, utility pages, AODA-ADA core, mockup legal, SEO/GEO), with a different technical target: GHL AI Studio's fixed TanStack Start v1 stack (React 19, TanStack Router file routes, Tailwind v4 oklch tokens, shadcn/ui, `createServerFn` forms). Phase 3 converts the approved mockup into drop-in route, component and server-function files. Modes: `new-site`, `new-page`, `fix`. Requires `ghl-website-builder` installed beside it.
 
+- [`skills/ghl-web-code-copy`](skills/ghl-web-code-copy/SKILL.md): copy finished site code (head code, global header/footer, pages, SEO panel settings, share images) into GHL by driving a browser the user is logged in to, with scripts for pasting, verifying, dragging global sections and checking the live page, plus a feedback log so each use improves the skill.
+
 ## Using a skill from this repo
 
 **Per-project**: clone or copy the skill folder into the project's `.claude/skills/`:
