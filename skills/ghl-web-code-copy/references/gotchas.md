@@ -78,3 +78,10 @@ Newest lessons go at the bottom of each section. Verified = seen working on a re
 - A header/footer change can look broken (both languages shown, menus overlapping) until the matching head-code CSS is in place: paste the head code BEFORE or together with global header/footer changes, and check one French and one English page on screen.
 
 - Use `scripts/ghl_headcode.mjs write <file> <backup-folder>` for the site-wide head code: it saves the backup, lists third-party tags in the old value and refuses to write if the new file lacks them. Then click Save on the Settings tab (spinner), wait 60 s, check live. Open the Settings tab with a click at the tab's screenshot position; it is NOT the page list.
+
+## Forms (Sites > Forms)
+- **The form builder runs in its own iframe** (`leadgen-apps-form-survey-builder.leadconnectorhq.com`), not the page-builder one. `ghl_do.mjs` now picks it up. Field settings panels have unlabelled inputs: use `setafter` ("Label", "Placeholder", "Subject").
+- Forms are duplicated from the list's ? > **Duplicate** (a form copy is fine; only PAGES must never be cloned). Rename in the dialog, then translate: field Label and Placeholder (side panel), the T&C consent (rich text: select all, retype, Ctrl+B for the bold company name), Submit button text (rich text), Settings > On Submit > Message, Notifications > Subject.
+- **Check Notifications > Email (To) on every form**: the owner's Career form had NO recipient. Add the address (type it, press Enter so it becomes a chip) and Save.
+- Save the form (top right), then confirm the "Updated on" time in the list.
+- A form's embed address is `https://app.<domain>/widget/form/<id>`, where `<id>` is the last segment of the builder URL. Update the page code (iframe src) to the French form id, paste, save, publish. Check live HTML for the id.

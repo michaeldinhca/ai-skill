@@ -51,3 +51,9 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Fix / workaround: see gotchas.md "Site-wide head/body tracking code": back up, diff, merge, then paste, then verify.
 - Proposed improvement: `ghl_headcode.mjs read|write` script that saves the backup, shows the diff and refuses to write if third-party tags would be dropped.
 - Applied: yes (gotchas.md).
+
+### 2026-10-26 French forms (inquiry + career), Zone de service rename, mid-width header
+- Worked: Duplicate form, inline translation with `setafter`, message-type On Submit, preview in a throwaway headless browser to check rendering, live check of embedded form ids.
+- Failed or slow: first tried the page-builder iframe selectors in the form builder; page list order shifted after earlier edits so a fixed click opened the wrong page (English 404; nothing changed). Always confirm the page name (eval on page text) before pasting.
+- Proposed improvement: `ghl_do.mjs` `expect` step that aborts the run when the open page's name is not the intended one; a `ghl_form_translate.mjs` that takes a JSON of labels.
+- Applied: partly (ghl_do.mjs: form-builder iframe, setafter).

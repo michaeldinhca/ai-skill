@@ -9,7 +9,7 @@
 //        optional "scope":"css selector"         limit the search
 //   {"clickxy":[x,y]}                            real mouse click at SCREENSHOT pixel coordinates (divided by devicePixelRatio for you)
 //   {"fill":"placeholder|aria-label|name|css","value":"..."}   focus a field, select all, type the value
-//   {"set":"placeholder|aria-label|name","value":"..."}   set an input/textarea value directly (use for SEO fields; typing breaks when the panel re-lays out)`n//   {"type":"text"}  {"press":"Enter"} or a chord {"press":"Control+A"}   keyboard
+//   {"set":"placeholder|aria-label|name","value":"..."}   set an input/textarea value directly (use for SEO fields; typing breaks when the panel re-lays out)`n//   {"setafter":"Label text","value":"..."}   set the first input that follows a label with that exact text (side panels with unlabelled inputs)`n//   {"type":"text"}  {"press":"Enter"} or a chord {"press":"Control+A"}   keyboard
 //   {"eval":"js expression"}                     run in the builder frame (or the page) and print the result
 //   {"text":true}                                print the visible text of the builder frame (or page)
 //   {"shot":"C:\\path\\shot.png"}                screenshot of the whole window
@@ -35,8 +35,9 @@ await page.bringToFront();
 let forceTop = false;
 
 async function ctx() {
-  if (!forceTop && page.url().includes('page-builder')) {
-    const f = page.frames().find(f => f.url().includes('page-builder.leadconnectorhq.com'));
+  if (!forceTop && /page-builder|form-builder|survey-builder/.test(page.url())) {
+    // the page builder and the form/survey builder each run in their own iframe
+    const f = page.frames().find(f => /page-builder\.leadconnectorhq\.com|leadgen-apps-form-survey-builder\.leadconnectorhq\.com/.test(f.url()));
     if (f && f !== page.mainFrame()) {
       const h = await f.frameElement(); const b = await h.boundingBox();
       return { f, dx: b.x, dy: b.y };
@@ -98,6 +99,23 @@ for (const s of steps) {
       return el.value === v ? 'ok' : 'value differs';
     }, s.set, s.value);
     console.log(`set "${s.set}": ${r}`); continue;
+  }
+  if (s.setafter) {
+    // set the first visible input/textarea that FOLLOWS a label whose text is exactly s.setafter (form builder side panels)
+    const c = await ctx();
+    const r = await c.f.evaluate((q, v) => {
+      const vis = e => e.offsetParent !== null;
+      const lab = [...document.querySelectorAll('label, div, span, p')].filter(e => vis(e) && e.children.length < 3 && (e.innerText || '').trim() === q)[0];
+      if (!lab) return 'LABEL NOT FOUND';
+      const all = [...document.querySelectorAll('input, textarea')].filter(vis);
+      const el = all.find(e => lab.compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING);
+      if (!el) return 'INPUT NOT FOUND';
+      const proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+      Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, v);
+      el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true }));
+      return el.value === v ? 'ok' : 'value differs';
+    }, s.setafter, s.value);
+    console.log(`setafter "${s.setafter}": ${r}`); continue;
   }
   if (s.type) { await page.keyboard.type(s.type, { delay: 10 }); console.log('typed ' + s.type.length + ' chars'); continue; }
   if (s.press) { const k = s.press.split('+'); for (const x of k.slice(0, -1)) await page.keyboard.down(x); await page.keyboard.press(k[k.length - 1]); for (const x of k.slice(0, -1).reverse()) await page.keyboard.up(x); console.log('press ' + s.press); continue; }
