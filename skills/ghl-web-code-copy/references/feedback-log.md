@@ -44,3 +44,10 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Fix / workaround: see gotchas.md "Updating a Global Section".
 - Proposed improvement: script that, after pasting, detects and confirms the "Section Changes Made" dialog before saving and publishing.
 - Applied: yes (gotchas.md, SKILL.md).
+
+### 2026-10-26 site-wide head code replaced
+- Worked: replacing the head tracking code with `01-site-head-code.html`, live check for the `[data-l` language rules; the broken bilingual header (menus overlapping) was fixed by it.
+- Failed or slow: I overwrote the old head code without backing it up first (the owner stressed sites often hold Google Tag Manager and tracking scripts). It turned out the old value equalled an earlier revision of our own file (git revision with identical length), so nothing was lost, but that was luck.
+- Fix / workaround: see gotchas.md "Site-wide head/body tracking code": back up, diff, merge, then paste, then verify.
+- Proposed improvement: `ghl_headcode.mjs read|write` script that saves the backup, shows the diff and refuses to write if third-party tags would be dropped.
+- Applied: yes (gotchas.md).

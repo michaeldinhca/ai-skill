@@ -65,3 +65,14 @@ Newest lessons go at the bottom of each section. Verified = seen working on a re
 - After one page is saved and published, every page that uses the section serves the new code (verified: English and French pages updated within about 60 s without republishing them). Confirm with `check_live.ps1` or by grepping the public HTML for a marker that only the new code has.
 - Before changing a global, tell the owner: it changes every page at once. Do it when they say so (this owner wanted the French pages built first, then the globals).
 - Paste the header and the footer one after the other; save the page after each if GHL shows the sync dialog twice.
+
+## Site-wide head/body tracking code (Websites > the site > Settings > Tracking & scripts)
+- **ALWAYS copy the OLD code out before replacing it.** Sites usually carry other tags there: Google Tag Manager, GA4, Meta pixel, chat widgets, verification meta tags. Overwriting loses them silently and GHL keeps no history.
+- Procedure (do all of it, in order):
+  1. Read the current value (`eval` on the textarea whose placeholder contains "loaded in the <head>", or `ghl_headcode.mjs read`), save it to `backup/head-<date>.html` outside the repo or in the client's backups folder, and print its length and sha1.
+  2. Compare with the code you are about to paste. Anything in the old value that is not in the new file (GTM, pixels, verification tags) must be **merged in**, not dropped. Show the owner the list of kept third-party tags.
+  3. Only then set the new value (native setter on the textarea, never typing) and click **Save** at the bottom of the Settings tab (wait for the spinner to end).
+  4. Verify on the live HTML (about 60 s later) that your marker is present AND that each third-party tag is still there.
+- Body tracking code is a separate textarea: leave it alone unless asked, and back it up the same way before touching it.
+- The site-wide head code is NOT the same as a page's Tracking Code (the `</>` icon in the builder, per page). Do not confuse the two.
+- A header/footer change can look broken (both languages shown, menus overlapping) until the matching head-code CSS is in place: paste the head code BEFORE or together with global header/footer changes, and check one French and one English page on screen.

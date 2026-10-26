@@ -42,7 +42,7 @@ Formats: `references/page-file-format.md`. UI map: `references/ui-map.md`.
 
 ## Workflow - mode `copy-site`
 Default order (confirm with the user):
-1. **Site head code** (`</>` Tracking Code > Header, `head`/`body` as the file says). Keep to what survives: no `<link>`.
+1. **Site head code** (Website Settings > Tracking & scripts > Head tracking code). **Back up the OLD value first and merge any GTM/pixel/verification tags** (gotchas: Site-wide head/body tracking code). Keep to what survives: no `<link>`.
 2. **Global header and footer**: change the code through any page that contains them (not the pencil icon, see gotchas: Updating a Global Section), Save the sync dialog, Save page, Publish. New pages get them by dragging from Saved Assets > Global Sections. Only touch existing globals when the owner says so.
 3. **Pages**, one at a time: create page + slug, add Row + Custom HTML/JS element, paste body, add global header above and footer below, Save.
 4. **Per page SEO**: SEO panel (title, description, social image URL, language, canonical), then page Header code from `HEAD-CODE-BEGIN..END`.
