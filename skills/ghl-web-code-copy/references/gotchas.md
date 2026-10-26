@@ -76,3 +76,5 @@ Newest lessons go at the bottom of each section. Verified = seen working on a re
 - Body tracking code is a separate textarea: leave it alone unless asked, and back it up the same way before touching it.
 - The site-wide head code is NOT the same as a page's Tracking Code (the `</>` icon in the builder, per page). Do not confuse the two.
 - A header/footer change can look broken (both languages shown, menus overlapping) until the matching head-code CSS is in place: paste the head code BEFORE or together with global header/footer changes, and check one French and one English page on screen.
+
+- Use `scripts/ghl_headcode.mjs write <file> <backup-folder>` for the site-wide head code: it saves the backup, lists third-party tags in the old value and refuses to write if the new file lacks them. Then click Save on the Settings tab (spinner), wait 60 s, check live. Open the Settings tab with a click at the tab's screenshot position; it is NOT the page list.

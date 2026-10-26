@@ -35,6 +35,7 @@ Portable Node is fine if Node is not installed. All scripts read `GHL_DEBUG_URL`
 | `scripts/ghl_paste.mjs file shot [body\|head]` | load code into the OPEN code editor via CodeMirror and sha1-check it |
 | `scripts/ghl_verify.mjs file [body\|head]` | after saving, compare what GHL stored with the file |
 | `scripts/ghl_drag.mjs x1 y1 x2 y2 shot` | real-mouse drag (Global Sections onto canvas) |
+| `scripts/ghl_headcode.mjs read/write` | site-wide head code: backs up the old value, refuses to drop GTM/pixel tags, then sets the new one |
 | `scripts/check_live.ps1 -Url ...` | what the published page outputs: lang, title, meta, canonical, og, duplicates |
 | `scripts/share_card.mjs spec.json out/` | 1200x630 share images with headline from brand assets |
 
