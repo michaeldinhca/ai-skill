@@ -63,3 +63,10 @@ If you cannot push, show the entry to the user so they can paste it into the rep
 - Failed or slow: bulk image-URL replace hit body photos (reverted); PowerShell alias clash (`Rd`) sent empty SEO values (caught before saving); canonical "already present" false positive; card lookup missed one name.
 - Proposed improvement: a `ghl_page.mjs` that runs the whole per-page flow; `expect` step to abort when the open page is not the intended one; check_live.ps1 should render with a headless browser to see JS-created tags.
 - Applied: yes (gotchas.md, ghl_seo.mjs).
+
+### 2026-10-27 llms.txt via Edit Domain, shared Edge window
+- Worked: Settings > Domains & URL Redirects > Manage > ⋮ > Edit; native-setter fill of the llms.txt textarea (1833 chars); Save; live `/llms.txt` after under a minute.
+- Failed or slow: `/settings/domains` URL redirects to the site list (correct path is `/settings/domain`); my own debug window died (port refused) so I had to use the shared Edge on 9333; scripts attach to the first crmbright tab, which was another session's.
+- Fix / workaround: gotchas.md (llms.txt/robots.txt corrected, shared browser note).
+- Proposed improvement: `GHL_TAB_MATCH` env var (URL substring) honoured by all scripts so sessions can share one browser; `ghl_domain_txt.mjs`.
+- Applied: yes (gotchas.md); script improvement open.
